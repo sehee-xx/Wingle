@@ -76,13 +76,13 @@ const SignBox = styled.div`
 `;
 
 const Signin = styled.div`
-  font-size: 12px;
+  font-size: 14px;
   color: #303033;
   cursor: pointer;
 `;
 
 const Signup = styled.div`
-  font-size: 12px;
+  font-size: 14px;
   color: #303033;
   cursor: pointer;
 `;
