@@ -159,16 +159,24 @@ const CardHeader = styled.div`
 `;
 
 const CardTitle = styled.label`
-  font-size: 16px;
+  font-size: 18px;
   font-weight: 600;
   color: #303033;
+
+  @media (max-width: 480px) {
+    font-size: 16px;
+  }
 `;
 
 const ShowTotal = styled.label`
-  font-size: 12px;
+  font-size: 14px;
   font-weight: 600;
   color: #bfbfbf;
   cursor: pointer;
+
+  @media (max-width: 480px) {
+    font-size: 12px;
+  }
 `;
 
 const CardListBox = styled.div`
@@ -178,39 +186,60 @@ const CardListBox = styled.div`
   justify-content: space-around;
   gap: 10px;
   margin-top: 10px;
+
+  @media (max-width: 480px) {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+  }
 `;
 
 const Card = styled.div`
   display: flex;
   flex-direction: column;
-  width: 200px;
-  height: 230px;
+  width: 300px;
   border-radius: 15px;
+
+  @media (max-width: 480px) {
+    width: 100%;
+  }
 `;
 
 const CardImg = styled.img`
   border-radius: 15px;
   width: 100%;
-  height: 150px;
+  height: 200px;
   cursor: pointer;
+
+  @media (max-width: 768px) {
+    height: 150px;
+  }
+
+  @media (max-width: 480px) {
+    height: 200px;
+  }
 `;
 
 const CardInnerTitle = styled.label`
-  font-size: 12px;
+  font-size: 16px;
   font-weight: 600;
   color: #303033;
   padding-top: 10px;
+
+  @media (max-width: 768px) {
+    font-size: 14px;
+  }
 `;
 
 const CardPrice = styled.label`
-  font-size: 12px;
+  font-size: 14px;
   font-weight: 700;
   color: #ff812e;
   padding-top: 5px;
 `;
 
 const CardExpertName = styled.label`
-  font-size: 10px;
+  font-size: 12px;
   font-weight: 600;
   color: #bfbfbf;
   padding-top: 5px;
@@ -224,15 +253,27 @@ const CategoryListBox = styled.div`
   gap: 10px;
   margin-top: 10px;
   margin-bottom: 30px;
+
+  @media (max-width: 768px) {
+    margin-bottom: 0px;
+  }
 `;
 
 const CategoryTitle = styled.label`
-  font-size: 14px;
+  font-size: 16px;
   color: #303033;
   transition: color 0.3s;
 
   &:hover {
     color: #ffffff;
+  }
+
+  @media (max-width: 768px) {
+    font-size: 14px;
+  }
+
+  @media (max-width: 480px) {
+    display: none;
   }
 `;
 
@@ -256,14 +297,27 @@ const Category = styled.div`
   &:hover ${CategoryTitle} {
     color: #ffffff;
   }
+
+  @media (max-width: 480px) {
+    padding: 0px 10px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    height: 50px;
+  }
 `;
 
 const CategorySub = styled.label`
-  font-size: 12px;
+  font-size: 14px;
   color: #737585;
   padding-bottom: 10px;
 
   &:hover ${CategoryTitle} {
     color: #f7f8f9;
+  }
+
+  @media (max-width: 480px) {
+    padding-bottom: 0px;
   }
 `;
