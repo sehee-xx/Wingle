@@ -15,8 +15,8 @@ const CreateClass = () => {
     <>
       <Header />
       <MakeClassWrapper>
-        <Title>원데이 클래스 만들기</Title>
         <FormWrapper>
+          <Title>원데이 클래스 만들기</Title>
           <InfoGroup>
             <SubLabel>수업 이름</SubLabel>
             <InfoInput placeholder="수업 이름을 입력해주세요" />
@@ -42,8 +42,12 @@ const CreateClass = () => {
             <InfoTextarea placeholder="클래스에 대해 설명해주세요" />
           </InfoGroup>
           <InfoGroup>
-            <SubLabel>이미지 첨부</SubLabel>
+            <SubLabel>썸네일 첨부</SubLabel>
             <ImageUploadInput type="file" accept="image/*" />
+          </InfoGroup>
+          <InfoGroup>
+            <SubLabel>추가 이미지 첨부</SubLabel>
+            <MultipleImagesUploadInput type="file" accept="image/*" multiple />
           </InfoGroup>
           <SubmitButton onClick={handleRegistClick}>등록하기</SubmitButton>
         </FormWrapper>
@@ -62,13 +66,29 @@ const MakeClassWrapper = styled.div`
   align-items: center;
   background-color: #f7f8f9;
   min-height: 100vh;
+
+  @media (max-width: 1024px) {
+    padding: 50px 0px;
+  }
+
+  @media (max-width: 480px) {
+    padding-top: 50px;
+    padding-left: 60px;
+    padding-right: 60px;
+    padding-bottom: 20px;
+  }
 `;
 
 const Title = styled.h1`
-  font-size: 24px;
+  font-size: 26px;
   font-weight: 700;
   color: #ff812e;
-  padding-bottom: 30px;
+  padding-bottom: 20px;
+
+  @media (max-width: 480px) {
+    font-size: 20px;
+    padding-bottom: 10px;
+  }
 `;
 
 const FormWrapper = styled.div`
@@ -78,6 +98,19 @@ const FormWrapper = styled.div`
   padding: 40px 60px;
   width: 100%;
   max-width: 600px;
+
+  @media (max-width: 1024px) {
+    max-width: 800px;
+  }
+
+  @media (max-width: 768px) {
+    max-width: 580px;
+    padding: 30px 60px;
+  }
+
+  @media (max-width: 480px) {
+    padding: 10px 30px;
+  }
 `;
 
 const InfoGroup = styled.div`
@@ -88,15 +121,19 @@ const InfoGroup = styled.div`
 `;
 
 const SubLabel = styled.label`
-  font-size: 14px;
+  font-size: 16px;
   font-weight: 600;
   color: #303033;
+
+  @media (max-width: 768px) {
+    font-size: 14px;
+  }
 `;
 
 const InfoInput = styled.input`
-  font-size: 14px;
+  font-size: 15px;
   color: #303033;
-  height: 40px;
+  height: 50px;
   border-radius: 10px;
   border: 1px solid #e1e1e3;
   padding: 0px 10px;
@@ -105,6 +142,11 @@ const InfoInput = styled.input`
 
   &:focus {
     border: 1px solid #ff812e;
+  }
+
+  @media (max-width: 480px) {
+    height: 40px;
+    font-size: 14px;
   }
 `;
 
@@ -138,13 +180,27 @@ const ImageUploadInput = styled.input`
   }
 `;
 
+const MultipleImagesUploadInput = styled.input`
+  font-size: 14px;
+  color: #303033;
+  border-radius: 10px;
+  border: 1px solid #e1e1e3;
+  padding: 10px;
+  box-sizing: border-box;
+  transition: border 0.3s;
+
+  &:focus {
+    border: 1px solid #ff812e;
+  }
+`;
+
 const SubmitButton = styled.button`
   width: 100%;
   height: 50px;
   background-color: #ff812e;
   color: #ffffff;
-  font-size: 16px;
-  font-weight: 600;
+  font-size: 18px;
+  font-weight: 700;
   border: none;
   border-radius: 10px;
   cursor: pointer;
@@ -152,5 +208,9 @@ const SubmitButton = styled.button`
 
   &:hover {
     background-color: #e66f1e;
+  }
+
+  @media (max-width: 768px) {
+    margin-bottom: 10px;
   }
 `;
