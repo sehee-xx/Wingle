@@ -218,6 +218,7 @@ const PostCard = styled.div`
   box-sizing: border-box;
   border-radius: 10px;
   gap: 15px;
+  cursor: pointer;
 `;
 
 const PostCardImg = styled.img`
