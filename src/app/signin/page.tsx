@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import styled from "styled-components";
 
-const LoginPage = () => {
+const Signin = () => {
   const [mounted, setMounted] = useState(false);
   const router = useRouter();
 
@@ -69,7 +69,7 @@ const LoginPage = () => {
   );
 };
 
-export default LoginPage;
+export default Signin;
 
 const LoginWrapper = styled.div`
   display: flex;
@@ -249,6 +249,7 @@ const GotoSignup = styled.div`
   box-sizing: border-box;
   border-radius: 10px;
   text-align: center;
+  margin-bottom: 20px;
   cursor: pointer;
   transition: background-color 0.3s;
 
@@ -258,6 +259,7 @@ const GotoSignup = styled.div`
 
   @media (max-width: 768px) {
     margin-bottom: 20px;
+    margin-bottom: 10px;
   }
 
   @media (max-width: 480px) {
