@@ -79,12 +79,20 @@ const Signin = styled.div`
   font-size: 14px;
   color: #303033;
   cursor: pointer;
+
+  @media (max-width: 480px) {
+    font-size: 12px;
+  }
 `;
 
 const Signup = styled.div`
   font-size: 14px;
   color: #303033;
   cursor: pointer;
+
+  @media (max-width: 480px) {
+    font-size: 12px;
+  }
 `;
 
 const Profile = styled.img`
@@ -92,4 +100,9 @@ const Profile = styled.img`
   height: 30px;
   border-radius: 50%;
   cursor: pointer;
+
+  @media (max-width: 480px) {
+    width: 30px;
+    height: 30px;
+  }
 `;
