@@ -21,7 +21,29 @@ const CardDetail = () => {
               설명이 여기에 들어갑니다...클래스 설명이 여기에
               들어갑니다...클래스 설명이 여기에 들어갑니다...클래스 설명이
               여기에 들어갑니다...클래스 설명이 여기에 들어갑니다...클래스
-              설명이 여기에 들어갑니다...클래스 설명이 여기에 들어갑니다...
+              설명이 여기에 들어갑니다...클래스 설명이 여기에
+              들어갑니다...클래스 설명이 여기에 들어갑니다...클래스 설명이
+              여기에 들어갑니다...클래스 설명이 여기에 들어갑니다...클래스
+              설명이 여기에 들어갑니다...클래스 설명이 여기에
+              들어갑니다...클래스 설명이 여기에 들어갑니다...클래스 설명이
+              여기에 들어갑니다...클래스 설명이 여기에 들어갑니다...클래스
+              설명이 여기에 들어갑니다...클래스 설명이 여기에
+              들어갑니다...클래스 설명이 여기에 들어갑니다...클래스 설명이
+              여기에 들어갑니다...클래스 설명이 여기에 들어갑니다...클래스
+              설명이 여기에 들어갑니다...클래스 설명이 여기에
+              들어갑니다...클래스 설명이 여기에 들어갑니다...클래스 설명이
+              여기에 들어갑니다...클래스 설명이 여기에 들어갑니다...클래스
+              설명이 여기에 들어갑니다...클래스 설명이 여기에
+              들어갑니다...클래스 설명이 여기에 들어갑니다...클래스 설명이
+              여기에 들어갑니다...클래스 설명이 여기에 들어갑니다...클래스
+              설명이 여기에 들어갑니다...클래스 설명이 여기에
+              들어갑니다...클래스 설명이 여기에 들어갑니다...클래스 설명이
+              여기에 들어갑니다...클래스 설명이 여기에 들어갑니다...클래스
+              설명이 여기에 들어갑니다...클래스 설명이 여기에
+              들어갑니다...클래스 설명이 여기에 들어갑니다...클래스 설명이
+              여기에 들어갑니다...클래스 설명이 여기에 들어갑니다...클래스
+              설명이 여기에 들어갑니다...클래스 설명이 여기에
+              들어갑니다...클래스 설명이 여기에 들어갑니다...
             </Description>
           </ClassInfo>
           <PurchaseSection>
@@ -41,8 +63,12 @@ export default CardDetail;
 const DetailWrapper = styled.div`
   display: flex;
   flex-direction: column;
-  padding: 30px 100px;
+  padding: 30px 250px;
   margin-top: 65px;
+
+  @media (max-width: 1024px) {
+    padding: 30px 30px;
+  }
 `;
 
 const ImageSection = styled.div`
@@ -62,6 +88,10 @@ const ContentSection = styled.div`
   flex-direction: row;
   gap: 20px;
   margin-top: 20px;
+
+  @media (max-width: 480px) {
+    flex-direction: column-reverse;
+  }
 `;
 
 const ClassInfo = styled.div`
@@ -71,18 +101,18 @@ const ClassInfo = styled.div`
   gap: 10px;
 `;
 
-const ClassName = styled.h1`
+const ClassName = styled.label`
   font-size: 24px;
   font-weight: bold;
   color: #303033;
 `;
 
-const Instructor = styled.h2`
+const Instructor = styled.label`
   font-size: 18px;
   color: #737585;
 `;
 
-const Description = styled.p`
+const Description = styled.label`
   font-size: 14px;
   color: #303033;
   line-height: 1.6;
@@ -94,6 +124,7 @@ const PurchaseSection = styled.div`
   flex-direction: column;
   gap: 10px;
   padding: 20px;
+  height: 100%;
   border: 1px solid #ddd;
   border-radius: 10px;
   background-color: #f9f9f9;
