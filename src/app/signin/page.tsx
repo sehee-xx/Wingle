@@ -18,6 +18,10 @@ const LoginPage = () => {
     router.push("/"); // 홈 페이지로 이동
   };
 
+  const handleSigninClick = () => {
+    router.push("/");
+  };
+
   const handleSignupClick = () => {
     router.push("/signup");
   };
@@ -37,7 +41,7 @@ const LoginPage = () => {
           <LoginInput placeholder="비밀번호를 입력해주세요"></LoginInput>
         </LoginInputGroup>
         <LoginInputGroup>
-          <LoginButton>로그인</LoginButton>
+          <LoginButton onClick={handleSigninClick}>로그인</LoginButton>
         </LoginInputGroup>
         <SocialLoginGroup>
           <LoginLabel>소셜 로그인</LoginLabel>
