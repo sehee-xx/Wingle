@@ -24,7 +24,7 @@ const Home = () => {
 export default Home;
 
 const HomeWrapper = styled.div`
-  padding: 5px 0px;
+  padding: 0px 0px;
   margin: auto;
   overflow-x: hidden;
 `;
