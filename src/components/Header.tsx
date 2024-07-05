@@ -47,12 +47,12 @@ const HeaderWrapper = styled.div`
   position: fixed;
   top: 0;
   width: 100%;
-  max-width: 1200px;
+  /* max-width: 1200px; */
   margin: 0 auto;
   background-color: white;
   z-index: 1000;
   border-bottom: 1px solid #e1e1e2;
-  padding: 5px 100px;
+  padding: 5px 250px;
   display: flex;
   flex-direction: row;
   align-items: center;
