@@ -26,6 +26,16 @@ const LoginPage = () => {
     router.push("/signup");
   };
 
+  const handleKakaoLogin = () => {
+    const kakaoAuthUrl = `https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=${process.env.NEXT_PUBLIC_KAKAO_REST_API_KEY}&redirect_uri=${process.env.NEXT_PUBLIC_KAKAO_REDIRECT_URI}`;
+    window.location.href = kakaoAuthUrl;
+  };
+
+  const handleGoogleLogin = () => {
+    const googleAuthUrl = `https://accounts.google.com/o/oauth2/v2/auth?response_type=code&client_id=${process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID}&redirect_uri=${process.env.NEXT_PUBLIC_GOOGLE_REDIRECT_URI}&scope=openid%20profile%20email`;
+    window.location.href = googleAuthUrl;
+  };
+
   if (!mounted) return null;
 
   return (
@@ -45,8 +55,10 @@ const LoginPage = () => {
         </LoginInputGroup>
         <SocialLoginGroup>
           <LoginLabel>소셜 로그인</LoginLabel>
-          <KakaoLogin>카카오톡으로 시작</KakaoLogin>
-          <GoogleLogin>구글 이메일로 시작</GoogleLogin>
+          <KakaoLogin onClick={handleKakaoLogin}>카카오톡으로 시작</KakaoLogin>
+          <GoogleLogin onClick={handleGoogleLogin}>
+            구글 이메일로 시작
+          </GoogleLogin>
         </SocialLoginGroup>
         <SocialLoginGroup>
           <LoginLabel>아직 회원이 아니라면?</LoginLabel>
