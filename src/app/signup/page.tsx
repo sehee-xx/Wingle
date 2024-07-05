@@ -145,4 +145,9 @@ const StartButton = styled.div`
   text-align: center;
   margin-top: 10px;
   cursor: pointer;
+  transition: background-color 0.3s;
+
+  &:hover {
+    background-color: #e66f1e;
+  }
 `;

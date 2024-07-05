@@ -99,6 +99,11 @@ const LoginButton = styled.div`
   border-radius: 10px;
   text-align: center;
   cursor: pointer;
+  transition: background-color 0.3s;
+
+  &:hover {
+    background-color: #e66f1e;
+  }
 `;
 
 const SocialLoginGroup = styled.div`
@@ -167,4 +172,9 @@ const GotoSignup = styled.div`
   border-radius: 10px;
   text-align: center;
   cursor: pointer;
+  transition: background-color 0.3s;
+
+  &:hover {
+    background-color: #e66f1e;
+  }
 `;
