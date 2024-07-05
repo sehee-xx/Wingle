@@ -58,6 +58,10 @@ const HeaderWrapper = styled.div`
   justify-content: space-between;
   box-sizing: border-box;
 
+  @media (max-width: 1024px) {
+    padding: 5px 20px;
+  }
+
   @media (max-width: 768px) {
     padding: 5px 20px;
   }
