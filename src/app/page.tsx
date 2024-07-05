@@ -10,12 +10,16 @@ const Home = () => {
   return (
     <HomeWrapper>
       <Header />
-      <Body>
-        <Carousel />
-      </Body>
-      <Footer>
-        <CardList />
-      </Footer>
+      <RealBody>
+        <Body>
+          <CarouselWrapper>
+            <Carousel />
+          </CarouselWrapper>
+        </Body>
+        <Footer>
+          <CardList />
+        </Footer>
+      </RealBody>
       <FooterBanner src="/assets/bottom_banner.png" />
     </HomeWrapper>
   );
@@ -33,24 +37,56 @@ const HomeWrapper = styled.div`
   align-items: center;
 `;
 
+const RealBody = styled.div`
+  width: 100%;
+  max-width: 1024px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  @media (max-width: 768px) {
+    max-width: 768px;
+  }
+
+  @media (max-width: 480px) {
+    max-width: 480px;
+  }
+`;
+
 const Body = styled.div`
   margin-top: 70px;
-  width: 1024px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   box-sizing: border-box;
 
   @media (max-width: 768px) {
-    padding: 0 10px;
+    margin-bottom: 30px;
     margin-top: 50px;
+  }
+`;
+
+const CarouselWrapper = styled.div`
+  width: 100%;
+  max-width: 1024px;
+
+  @media (max-width: 480px) {
+    display: none;
   }
 `;
 
 const Footer = styled.div`
   padding: 50px 20px;
-  max-width: 1024px;
   box-sizing: border-box;
+  width: 100%;
 
   @media (max-width: 768px) {
-    padding: 20px 10px;
+    padding: 20px 30px;
+  }
+
+  @media (max-width: 480px) {
+    padding: 20px 20px;
   }
 `;
 
