@@ -65,7 +65,7 @@ const LoginWrapper = styled.div`
   align-items: center;
   padding: 50px 50px;
   background-image: url("/assets/background.png");
-  /* background-color: #f7f8f9; */
+  /* background-color: #ffd453; */
 `;
 
 const LoginBox = styled.div`
