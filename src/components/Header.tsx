@@ -47,17 +47,20 @@ const HeaderWrapper = styled.div`
   position: fixed;
   top: 0;
   width: 100%;
-  /* max-width: 1200px; */
   margin: 0 auto;
   background-color: white;
   z-index: 1000;
   border-bottom: 1px solid #e1e1e2;
-  padding: 5px 250px;
+  padding: 5px 240px;
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
   box-sizing: border-box;
+
+  @media (max-width: 768px) {
+    padding: 5px 20px;
+  }
 `;
 
 const Logo = styled.img`
