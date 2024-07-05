@@ -11,8 +11,8 @@ const CardList = () => {
     setMounted(true);
   }, []);
 
-  const handleCardClick = () => {
-    router.push("/card");
+  const handleCardClick = (id) => {
+    router.push(`/card/${id}`);
   };
 
   if (!mounted) return null;
@@ -22,28 +22,28 @@ const CardList = () => {
       <CardBox>
         <CardHeader>
           <CardTitle>현재 가장 인기있는 서비스</CardTitle>
-          <ShowTotal onClick={handleCardClick}>전체보기</ShowTotal>
+          <ShowTotal onClick={() => router.push("/card")}>전체보기</ShowTotal>
         </CardHeader>
         <CardListBox>
-          <Card>
+          <Card onClick={() => handleCardClick(1)}>
             <CardImg src="/assets/card1.png" alt="Card 1" />
             <CardInnerTitle>강아지 간식 만들기 체험</CardInnerTitle>
             <CardPrice>45,000원~</CardPrice>
             <CardExpertName>신진영</CardExpertName>
           </Card>
-          <Card>
+          <Card onClick={() => handleCardClick(2)}>
             <CardImg src="/assets/card2.png" alt="Card 2" />
             <CardInnerTitle>강남-해금무드: 해금 체험</CardInnerTitle>
             <CardPrice>90,000원~</CardPrice>
             <CardExpertName>양세희</CardExpertName>
           </Card>
-          <Card>
+          <Card onClick={() => handleCardClick(3)}>
             <CardImg src="/assets/card3.png" alt="Card 3" />
             <CardInnerTitle>명함 만들기 체험</CardInnerTitle>
             <CardPrice>55,000원~</CardPrice>
             <CardExpertName>박상우</CardExpertName>
           </Card>
-          <Card>
+          <Card onClick={() => handleCardClick(4)}>
             <CardImg src="/assets/card4.png" alt="Card 4" />
             <CardInnerTitle>일러스트 원데이 클래스</CardInnerTitle>
             <CardPrice>65,000원~</CardPrice>
@@ -54,28 +54,28 @@ const CardList = () => {
       <CardBox>
         <CardHeader>
           <CardTitle>윙글이 추천하는 서비스</CardTitle>
-          <ShowTotal onClick={handleCardClick}>전체보기</ShowTotal>
+          <ShowTotal onClick={() => router.push("/card")}>전체보기</ShowTotal>
         </CardHeader>
         <CardListBox>
-          <Card>
+          <Card onClick={() => handleCardClick(5)}>
             <CardImg src="/assets/card5.png" alt="Card 5" />
             <CardInnerTitle>나만의 향수 만들기 원데이 클래스</CardInnerTitle>
             <CardPrice>55,000원~</CardPrice>
             <CardExpertName>조승완</CardExpertName>
           </Card>
-          <Card>
+          <Card onClick={() => handleCardClick(6)}>
             <CardImg src="/assets/card6.png" alt="Card 6" />
             <CardInnerTitle>앙금 꽃 케이크 만들기-힐링</CardInnerTitle>
             <CardPrice>80,000원~</CardPrice>
             <CardExpertName>주서현</CardExpertName>
           </Card>
-          <Card>
+          <Card onClick={() => handleCardClick(7)}>
             <CardImg src="/assets/card7.png" alt="Card 7" />
             <CardInnerTitle>CNC를 이용한 목공 원데이 클래스</CardInnerTitle>
             <CardPrice>60,000원~</CardPrice>
             <CardExpertName>안규찬</CardExpertName>
           </Card>
-          <Card>
+          <Card onClick={() => handleCardClick(8)}>
             <CardImg src="/assets/card8.png" alt="Card 8" />
             <CardInnerTitle>아름다운 꽃꽂이 쉽게 알려드려요</CardInnerTitle>
             <CardPrice>75,000원~</CardPrice>
@@ -109,28 +109,28 @@ const CardList = () => {
       <CardBox>
         <CardHeader>
           <CardTitle>다른 회원들이 많이 찾는 서비스</CardTitle>
-          <ShowTotal onClick={handleCardClick}>전체보기</ShowTotal>
+          <ShowTotal onClick={() => router.push("/card")}>전체보기</ShowTotal>
         </CardHeader>
         <CardListBox>
-          <Card>
+          <Card onClick={() => handleCardClick(9)}>
             <CardImg src="/assets/card9.png" alt="Card 9" />
             <CardInnerTitle>나도 밴드체험 한번 해볼까?</CardInnerTitle>
             <CardPrice>35,000원~</CardPrice>
             <CardExpertName>김서영</CardExpertName>
           </Card>
-          <Card>
+          <Card onClick={() => handleCardClick(10)}>
             <CardImg src="/assets/card10.png" alt="Card 10" />
             <CardInnerTitle>술술 놀면서 수제 맥주 만들기</CardInnerTitle>
             <CardPrice>50,000원~</CardPrice>
             <CardExpertName>윤우성</CardExpertName>
           </Card>
-          <Card>
+          <Card onClick={() => handleCardClick(11)}>
             <CardImg src="/assets/card11.png" alt="Card 11" />
             <CardInnerTitle>나만의 퍼스널컬러, 골격진단</CardInnerTitle>
             <CardPrice>59,900원~</CardPrice>
             <CardExpertName>김예락</CardExpertName>
           </Card>
-          <Card>
+          <Card onClick={() => handleCardClick(12)}>
             <CardImg src="/assets/card12.png" alt="Card 12" />
             <CardInnerTitle>[앙렉스x서핑캠프]-시원한 서핑</CardInnerTitle>
             <CardPrice>190,000원~</CardPrice>
@@ -226,6 +226,16 @@ const CategoryListBox = styled.div`
   margin-bottom: 30px;
 `;
 
+const CategoryTitle = styled.label`
+  font-size: 14px;
+  color: #303033;
+  transition: color 0.3s;
+
+  &:hover {
+    color: #ffffff;
+  }
+`;
+
 const Category = styled.div`
   display: flex;
   flex-direction: column;
@@ -235,15 +245,25 @@ const Category = styled.div`
   border-radius: 15px;
   background-color: #e1e1e2;
   padding: 0px 30px;
+  transition: background-color 0.3s, transform 0.3s;
+  cursor: pointer;
+
+  &:hover {
+    background-color: #ff812e;
+    transform: scale(1.05);
+  }
+
+  &:hover ${CategoryTitle} {
+    color: #ffffff;
+  }
 `;
 
 const CategorySub = styled.label`
   font-size: 12px;
   color: #737585;
   padding-bottom: 10px;
-`;
 
-const CategoryTitle = styled.label`
-  font-size: 14px;
-  color: #303033;
+  &:hover ${CategoryTitle} {
+    color: #f7f8f9;
+  }
 `;
