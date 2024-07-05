@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import styled from "styled-components";
 
-const LoginPage = () => {
+const Signup = () => {
   const [mounted, setMounted] = useState(false);
   const router = useRouter();
 
@@ -59,15 +59,27 @@ const LoginPage = () => {
   );
 };
 
-export default LoginPage;
+export default Signup;
 
 const LoginWrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 50px 50px;
+  justify-content: center;
+  padding: 0px 50px;
   background-image: url("/assets/background.png");
-  /* background-color: #f7f8f9; */
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  min-height: 100vh;
+
+  @media (max-width: 768px) {
+    padding: 50px 0px;
+  }
+
+  @media (max-width: 480px) {
+    padding: 0px 0px;
+  }
 `;
 
 const LoginBox = styled.div`
@@ -77,16 +89,28 @@ const LoginBox = styled.div`
   justify-content: center;
   border-radius: 15px;
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
-  width: 400px;
+  width: 600px;
   padding: 30px 30px;
   gap: 20px;
   background-color: #ffffff;
+
+  @media (max-width: 768px) {
+    padding: 20px 20px;
+  }
+
+  @media (max-width: 480px) {
+    width: 350px;
+  }
 `;
 
 const Logo = styled.img`
   cursor: pointer;
-  width: 120px;
+  width: 200px;
   padding-bottom: 20px;
+
+  @media (max-width: 768px) {
+    width: 100px;
+  }
 `;
 
 const SignupGroup = styled.div`
@@ -96,20 +120,32 @@ const SignupGroup = styled.div`
 `;
 
 const Grouplabel = styled.label`
-  font-size: 12px;
+  font-size: 18px;
   font-weight: 600;
   color: #303033;
+
+  @media (max-width: 480px) {
+    font-size: 14px;
+  }
 `;
 
 const Input = styled.input`
-  width: 300px;
-  height: 35px;
+  width: 500px;
+  height: 50px;
   border: 1px solid #e1e1e3;
   border-radius: 10px;
   padding: 0px 10px;
   box-sizing: border-box;
   &::placeholder {
-    font-size: 11px;
+    font-size: 14px;
+  }
+
+  @media (max-width: 480px) {
+    width: 300px;
+    height: 40px;
+    &::placeholder {
+      font-size: 12px;
+    }
   }
 `;
 
@@ -117,12 +153,17 @@ const TypeGroup = styled.div`
   display: flex;
   flex-direction: row;
   gap: 10px;
-  width: 300px;
+  width: 500px;
+
+  @media (max-width: 480px) {
+    width: 300px;
+  }
 `;
 
 const RadioWrapper = styled.div`
   display: flex;
   align-items: center;
+  font-size: 14px;
 `;
 
 const Radio = styled.input`
@@ -130,25 +171,44 @@ const Radio = styled.input`
 `;
 
 const RadioLabel = styled.label`
-  font-size: 12px;
+  font-size: 16px;
   color: #303033;
+
+  @media (max-width: 480px) {
+    font-size: 12px;
+  }
 `;
 
 const StartButton = styled.div`
-  width: 300px;
-  padding: 10px 10px;
-  font-size: 12px;
+  width: 500px;
+  height: 50px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
   font-weight: 600;
   color: #ffffff;
   background-color: #ff812e;
   box-sizing: border-box;
   border-radius: 10px;
   text-align: center;
-  margin-top: 10px;
+  margin-bottom: 20px;
   cursor: pointer;
   transition: background-color 0.3s;
 
   &:hover {
     background-color: #e66f1e;
+  }
+
+  @media (max-width: 768px) {
+    margin-bottom: 20px;
+    margin-bottom: 10px;
+  }
+
+  @media (max-width: 480px) {
+    width: 300px;
+    height: 40px;
+    font-size: 14px;
   }
 `;
