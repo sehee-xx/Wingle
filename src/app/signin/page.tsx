@@ -33,8 +33,8 @@ const LoginPage = () => {
       <LoginBox>
         <Logo onClick={handleLogoClick} src="/assets/logo.svg" alt="Logo" />
         <LoginInputGroup>
-          <LoginLabel>아이디</LoginLabel>
-          <LoginInput placeholder="아이디를 입력해주세요"></LoginInput>
+          <LoginLabel>이메일</LoginLabel>
+          <LoginInput placeholder="이메일을 입력해주세요"></LoginInput>
         </LoginInputGroup>
         <LoginInputGroup>
           <LoginLabel>비밀번호</LoginLabel>
@@ -46,7 +46,7 @@ const LoginPage = () => {
         <SocialLoginGroup>
           <LoginLabel>소셜 로그인</LoginLabel>
           <KakaoLogin>카카오톡으로 시작</KakaoLogin>
-          <GoogleLogin>구글 아이디로 시작</GoogleLogin>
+          <GoogleLogin>구글 이메일로 시작</GoogleLogin>
         </SocialLoginGroup>
         <SocialLoginGroup>
           <LoginLabel>아직 회원이 아니라면?</LoginLabel>
