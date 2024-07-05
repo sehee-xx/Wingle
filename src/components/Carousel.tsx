@@ -6,7 +6,7 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import Image from "next/image";
 
-export default function Carousel() {
+const Carousel = () => {
   const settings = {
     dots: true,
     infinite: true,
@@ -123,10 +123,17 @@ export default function Carousel() {
       </Slider>
     </>
   );
-}
+};
+
+export default Carousel;
 
 const ImageWrapper = styled.div`
   position: relative;
   width: 100%;
   height: 300px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto;
+  max-width: 1024px;
 `;

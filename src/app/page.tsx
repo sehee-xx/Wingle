@@ -86,7 +86,7 @@ const Footer = styled.div`
   }
 
   @media (max-width: 480px) {
-    padding: 20px 20px;
+    padding: 10px 20px;
   }
 `;
 
