@@ -54,58 +54,101 @@ const PageWrapper = styled.div`
   display: flex;
   flex-direction: column;
   overflow: hidden;
+
+  @media (max-width: 480px) {
+    padding-bottom: 10px;
+  }
 `;
 
 const CardListWrapper = styled.div`
   flex: 1;
-  padding: 20px 100px;
+  padding: 20px 250px;
   overflow-y: auto;
   margin-top: 65px;
   display: flex;
   flex-direction: column;
+
+  @media (max-width: 1024px) {
+    padding: 20px 30px;
+  }
 `;
 
 const Title = styled.h1`
   font-size: 24px;
   font-weight: bold;
   margin-bottom: 20px;
+
+  @media (max-width: 768px) {
+    font-size: 20px;
+  }
 `;
 
 const SearchBar = styled.input`
   width: 100%;
-  padding: 10px;
+  padding: 15px;
   margin-bottom: 20px;
   border: 1px solid #ddd;
   border-radius: 10px;
   box-sizing: border-box;
+  font-size: 16px;
+
+  @media (max-width: 1024px) {
+    padding: 13px;
+  }
+
+  @media (max-width: 768px) {
+    padding: 11px;
+    font-size: 15px;
+  }
+
+  @media (max-width: 480px) {
+    padding: 9px;
+    font-size: 13px;
+    margin-bottom: 15px;
+  }
 `;
 
 const SortFilterWrapper = styled.div`
   display: flex;
   gap: 10px;
   margin-bottom: 20px;
+
+  @media (max-width: 480px) {
+    margin-bottom: 15px;
+  }
 `;
 
 const SortFilterButton = styled.button`
   padding: 10px 20px;
   border: 1px solid #ddd;
   border-radius: 10px;
+  font-size: 14px;
   background-color: white;
   cursor: pointer;
   &:hover {
     background-color: #f0f0f0;
   }
+
+  @media (max-width: 480px) {
+    padding: 0px 10px;
+    font-size: 12px;
+  }
 `;
 
 const CardContainer = styled.div`
-  display: flex;
-  flex-wrap: wrap;
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
   gap: 20px;
   flex: 1;
+
+  @media (max-width: 480px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
 `;
 
 const Card = styled.div`
-  width: calc(33.333% - 20px);
+  width: 100%;
   cursor: pointer;
   border: 1px solid #ddd;
   border-radius: 10px;
@@ -118,18 +161,26 @@ const Card = styled.div`
 
 const CardImg = styled.img`
   width: 100%;
-  height: 150px;
+  height: 200px;
   object-fit: cover;
+
+  @media (max-width: 768px) {
+    height: 150px;
+  }
 `;
 
 const CardContent = styled.div`
   padding: 15px;
 `;
 
-const CardTitle = styled.h2`
+const CardTitle = styled.label`
   font-size: 18px;
   font-weight: bold;
   margin-bottom: 10px;
+
+  @media (max-width: 768px) {
+    font-size: 16px;
+  }
 `;
 
 const CardDescription = styled.p`
@@ -141,12 +192,20 @@ const CardDescription = styled.p`
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   white-space: pre-wrap;
+
+  @media (max-width: 768px) {
+    font-size: 12px;
+  }
 `;
 
 const CardPrice = styled.div`
   font-size: 16px;
   font-weight: bold;
   color: #ff812e;
+
+  @media (max-width: 768px) {
+    font-size: 14px;
+  }
 `;
 
 const CreateClass = styled.div`
@@ -157,7 +216,7 @@ const CreateClass = styled.div`
   width: 150px;
   height: 40px;
   font-size: 16px;
-  font-weight: 600;
+  font-weight: 700;
   background-color: #ff812e;
   color: #ffffff;
   border-radius: 10px;
@@ -167,5 +226,10 @@ const CreateClass = styled.div`
 
   &:hover {
     background-color: #e66f1e;
+  }
+
+  @media (max-width: 480px) {
+    width: 120px;
+    font-size: 14px;
   }
 `;
