@@ -23,6 +23,10 @@ const Header = () => {
     router.push("/");
   };
 
+  const handleProfileClick = () => {
+    router.push("/mypage");
+  };
+
   return (
     <>
       <HeaderWrapper>
@@ -30,7 +34,7 @@ const Header = () => {
         <SignBox>
           <Signin onClick={handleSigninClick}>로그인</Signin>
           <Signup onClick={handleSignupClick}>회원가입</Signup>
-          <Profile src="/assets/student.svg" />
+          <Profile onClick={handleProfileClick} src="/assets/student.svg" />
         </SignBox>
       </HeaderWrapper>
     </>
