@@ -71,6 +71,10 @@ const CardListWrapper = styled.div`
   @media (max-width: 1024px) {
     padding: 20px 30px;
   }
+
+  @media (max-width: 1024px) {
+    padding: 20px 25px;
+  }
 `;
 
 const Title = styled.h1`
