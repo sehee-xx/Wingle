@@ -84,7 +84,7 @@ const Signup = () => {
         MySwal.fire({
           icon: "success",
           title: "회원가입 성공",
-          text: "윙그리가 되었습니다!",
+          text: "회원가입에 성공했습니다!",
           toast: true,
           position: "top-end",
           showConfirmButton: false,
@@ -99,7 +99,7 @@ const Signup = () => {
         MySwal.fire({
           icon: "success",
           title: "회원가입 성공",
-          text: "윙그리가 되었습니다!",
+          text: "회원가입에 성공했습니다!",
           confirmButtonText: "확인",
           confirmButtonColor: "#FF812E",
           customClass: {
