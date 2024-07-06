@@ -67,7 +67,7 @@ const DetailWrapper = styled.div`
   margin-top: 65px;
 
   @media (max-width: 1024px) {
-    padding: 30px 30px;
+    padding: 30px 25px;
   }
 `;
 
