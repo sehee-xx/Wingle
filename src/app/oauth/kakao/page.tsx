@@ -32,8 +32,9 @@ const KakaoRedirect = () => {
 
       try {
         isRequestSent.current = true;
+        console.log(process.env.BACKEND_HOSTNAME);
         const response = await axios.get(
-          `http://143.248.195.71:8080/accounts/kakao/signin?code=${code}`
+          `${process.env.BACKEND_HOSTNAME}/accounts/kakao/signin?code=${code}`
         );
         console.log("Response:", response.data);
         const { token } = response.data;

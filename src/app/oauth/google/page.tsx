@@ -33,7 +33,7 @@ const GoogleRedirect = () => {
       try {
         isRequestSent.current = true;
         const response = await axios.get(
-          `http://143.248.195.71:8080/accounts/google/signin?code=${code}`
+          `${process.env.BACKEND_HOSTNAME}/accounts/google/signin?code=${code}`
         );
         console.log("Response:", response.data);
         const { token } = response.data;
