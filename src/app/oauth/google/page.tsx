@@ -3,6 +3,8 @@
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useRef } from "react";
 import axios from "axios";
+import Loading from "../../../components/Loading";
+import { Suspense } from "react";
 
 const GoogleRedirect = () => {
   const router = useRouter();
@@ -46,7 +48,15 @@ const GoogleRedirect = () => {
     fetchToken();
   }, [searchParams, router]);
 
-  return <div>로그인 중...</div>;
+  return <Loading />;
 };
 
-export default GoogleRedirect;
+const GoogleRedirectWrapper = () => {
+  return (
+    <Suspense fallback={<Loading />}>
+      <GoogleRedirect />
+    </Suspense>
+  );
+};
+
+export default GoogleRedirectWrapper;

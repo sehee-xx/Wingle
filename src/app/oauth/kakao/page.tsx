@@ -3,6 +3,8 @@
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useRef } from "react";
 import axios from "axios";
+import Loading from "../../../components/Loading";
+import { Suspense } from "react";
 
 const KakaoRedirect = () => {
   const router = useRouter();
@@ -46,7 +48,15 @@ const KakaoRedirect = () => {
     fetchToken();
   }, [searchParams, router]);
 
-  return <div>로그인 중...</div>;
+  return <Loading />;
 };
 
-export default KakaoRedirect;
+const KakaoRedirectWrapper = () => {
+  return (
+    <Suspense fallback={<Loading />}>
+      <KakaoRedirect />
+    </Suspense>
+  );
+};
+
+export default KakaoRedirectWrapper;
