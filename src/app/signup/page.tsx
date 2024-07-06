@@ -1,5 +1,3 @@
-// src/app/login/page.tsx
-
 "use client";
 
 import { useRouter } from "next/navigation";
@@ -15,7 +13,7 @@ const Signup = () => {
   }, []);
 
   const handleLogoClick = () => {
-    router.push("/"); // 홈 페이지로 이동
+    router.push("/");
   };
 
   const handleSignupClick = () => {
@@ -32,11 +30,30 @@ const Signup = () => {
           <Grouplabel>타입</Grouplabel>
           <TypeGroup>
             <RadioWrapper>
-              <Radio type="radio" id="student" name="type" value="student" />
+              <CustomRadioInput
+                type="radio"
+                id="student"
+                name="type"
+                value="student"
+                defaultChecked
+              />
+              <CustomRadio htmlFor="student">
+                <UncheckedIcon src="/assets/disable.svg" alt="Unchecked" />
+                <CheckedIcon src="/assets/normal.svg" alt="Checked" />
+              </CustomRadio>
               <RadioLabel htmlFor="student">수강생</RadioLabel>
             </RadioWrapper>
             <RadioWrapper>
-              <Radio type="radio" id="expert" name="type" value="expert" />
+              <CustomRadioInput
+                type="radio"
+                id="expert"
+                name="type"
+                value="expert"
+              />
+              <CustomRadio htmlFor="expert">
+                <UncheckedIcon src="/assets/disable.svg" alt="Unchecked" />
+                <CheckedIcon src="/assets/normal.svg" alt="Checked" />
+              </CustomRadio>
               <RadioLabel htmlFor="expert">전문가</RadioLabel>
             </RadioWrapper>
           </TypeGroup>
@@ -167,12 +184,36 @@ const RadioWrapper = styled.div`
 `;
 
 const Radio = styled.input`
-  margin-right: 5px;
+  display: none;
+`;
+
+const CustomRadio = styled.label`
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  position: relative;
+`;
+
+const UncheckedIcon = styled.img`
+  display: block;
+  width: 24px;
+  height: 24px;
+  width: 15px;
+  height: 15px;
+`;
+
+const CheckedIcon = styled.img`
+  display: none;
+  width: 24px;
+  height: 24px;
+  width: 15px;
+  height: 15px;
 `;
 
 const RadioLabel = styled.label`
   font-size: 16px;
   color: #303033;
+  margin-left: 5px;
 
   @media (max-width: 480px) {
     font-size: 12px;
@@ -210,5 +251,15 @@ const StartButton = styled.div`
     width: 300px;
     height: 40px;
     font-size: 14px;
+  }
+`;
+
+const CustomRadioInput = styled(Radio)`
+  &:checked + ${CustomRadio} ${UncheckedIcon} {
+    display: none;
+  }
+
+  &:checked + ${CustomRadio} ${CheckedIcon} {
+    display: block;
   }
 `;
