@@ -67,6 +67,7 @@ const CardListWrapper = styled.div`
   margin-top: 65px;
   display: flex;
   flex-direction: column;
+  margin-bottom: 30px;
 
   @media (max-width: 1024px) {
     padding: 20px 30px;
