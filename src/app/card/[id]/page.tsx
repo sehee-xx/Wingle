@@ -9,7 +9,7 @@ import {
   Marker,
   InfoWindow,
 } from "@react-google-maps/api";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 const containerStyle = {
   width: "100%",
@@ -26,6 +26,26 @@ const CardDetail = () => {
     lat: number;
     lng: number;
   } | null>(null);
+
+  const [isMapLoaded, setIsMapLoaded] = useState(false);
+
+  useEffect(() => {
+    // 로드 스크립트를 이용해 구글맵 API를 로드합니다.
+    const loadGoogleMapsScript = () => {
+      const script = document.createElement("script");
+      script.src = `https://maps.googleapis.com/maps/api/js?key=AIzaSyDAc0DUbHSqW6lqVKnI-sIO4QHBpsr1nWY`;
+      script.async = true;
+      script.defer = true;
+      script.onload = () => setIsMapLoaded(true);
+      document.head.appendChild(script);
+    };
+
+    if (!window.google) {
+      loadGoogleMapsScript();
+    } else {
+      setIsMapLoaded(true);
+    }
+  }, []);
 
   return (
     <>
@@ -55,7 +75,7 @@ const CardDetail = () => {
           설명입니다...설명입니다...설명입니다...설명입니다...설명입니다...설명입니다...설명입니다...설명입니다...설명입니다...설명입니다...설명입니다...설명입니다...설명입니다...설명입니다...설명입니다...설명입니다...설명입니다...설명입니다...설명입니다...설명입니다...설명입니다...설명입니다...설명입니다...설명입니다...설명입니다...설명입니다...설명입니다...설명입니다...설명입니다...설명입니다...설명입니다...설명입니다...설명입니다...설명입니다...설명입니다...설명입니다...설명입니다...설명입니다...설명입니다...설명입니다...설명입니다...설명입니다...설명입니다...설명입니다...설명입니다...설명입니다...설명입니다...설명입니다...설명입니다...설명입니다...설명입니다...설명입니다...설명입니다...설명입니다...설명입니다...설명입니다...설명입니다...설명입니다...ㅍ
         </Description>
         <MapSection>
-          <LoadScript googleMapsApiKey="AIzaSyDAc0DUbHSqW6lqVKnI-sIO4QHBpsr1nWY">
+          {isMapLoaded ? (
             <GoogleMap
               mapContainerStyle={containerStyle}
               center={center}
@@ -85,7 +105,9 @@ const CardDetail = () => {
                 </InfoWindow>
               )}
             </GoogleMap>
-          </LoadScript>
+          ) : (
+            <LoadingMessage>Loading...</LoadingMessage>
+          )}
         </MapSection>
       </DetailWrapper>
     </>
@@ -281,4 +303,15 @@ const MapText = styled.div`
   font-weight: 700;
   padding-left: 5px;
   padding-bottom: 5px;
+`;
+
+const LoadingMessage = styled.div`
+  width: 100%;
+  height: 400px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  font-weight: bold;
+  color: #ff812e;
 `;
