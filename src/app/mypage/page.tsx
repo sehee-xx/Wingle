@@ -197,6 +197,9 @@ const MypageWrapper = styled.div`
 
   @media (max-width: 768px) {
     padding-top: 90px;
+    padding-left: 25px;
+    padding-right: 25px;
+    padding-bottom: 30px;
   }
 `;
 
@@ -208,6 +211,10 @@ const Content = styled.div`
 
   @media (max-width: 1024px) {
     padding-left: 10px;
+  }
+
+  @media (max-width: 480px) {
+    padding-left: 0px;
   }
 `;
 
