@@ -1,17 +1,18 @@
 "use client";
 
 import { useRouter, useSearchParams } from "next/navigation";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import axios from "axios";
 
 const KakaoRedirect = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const isRequestSent = useRef(false);
 
   useEffect(() => {
     if (!searchParams) {
       console.error("Search parameters are null");
-      router.push("/login");
+      router.push("/");
       return;
     }
 
@@ -20,16 +21,19 @@ const KakaoRedirect = () => {
 
     if (!code) {
       console.error("No code found");
-      router.push("/login");
+      router.push("/");
       return;
     }
 
     const fetchToken = async () => {
+      if (isRequestSent.current) return;
+
       try {
-        const response = await axios.post("/apis/accounts/kakao/signin", {
-          code,
-        });
-        console.log("Response:", response.data); // 응답 데이터 로그
+        isRequestSent.current = true;
+        const response = await axios.get(
+          `http://143.248.195.71:8080/accounts/kakao/signin?code=${code}`
+        );
+        console.log("Response:", response.data);
         const { token } = response.data;
         localStorage.setItem("token", token);
         router.push("/signin");

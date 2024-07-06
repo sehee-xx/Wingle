@@ -1,17 +1,18 @@
 "use client";
 
 import { useRouter, useSearchParams } from "next/navigation";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import axios from "axios";
 
 const GoogleRedirect = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const isRequestSent = useRef(false);
 
   useEffect(() => {
     if (!searchParams) {
       console.error("Search parameters are null");
-      router.push("/login");
+      router.push("/");
       return;
     }
 
@@ -25,9 +26,12 @@ const GoogleRedirect = () => {
     }
 
     const fetchToken = async () => {
+      if (isRequestSent.current) return;
+
       try {
+        isRequestSent.current = true;
         const response = await axios.get(
-          `/accounts/google/signin?code=${code}`
+          `http://143.248.195.71:8080/accounts/google/signin?code=${code}`
         );
         console.log("Response:", response.data);
         const { token } = response.data;
