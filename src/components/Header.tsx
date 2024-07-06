@@ -24,7 +24,8 @@ const Header = () => {
   };
 
   const handleProfileClick = () => {
-    router.push("/mypage");
+    // expert, student 구분해서 routing
+    router.push("/expertMypage");
   };
 
   return (
