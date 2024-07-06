@@ -1,5 +1,6 @@
 "use client";
 
+import axios from "axios";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import styled from "styled-components";
@@ -7,6 +8,12 @@ import styled from "styled-components";
 const Signup = () => {
   const [mounted, setMounted] = useState(false);
   const router = useRouter();
+  const [formData, setFormData] = useState({
+    type: "student",
+    email: "",
+    password: "",
+    displayName: "",
+  });
 
   useEffect(() => {
     setMounted(true);
@@ -16,8 +23,21 @@ const Signup = () => {
     router.push("/");
   };
 
-  const handleSignupClick = () => {
-    router.push("/signin");
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prevData) => ({ ...prevData, [name]: value }));
+  };
+
+  const handleSignupClick = async () => {
+    try {
+      const response = await axios.post(
+        `${process.env.BACKEND_HOSTNAME}/accounts/signup`,
+        formData
+      );
+      router.push("/signin");
+    } catch (error) {
+      console.log("Signup failed", error);
+    }
   };
 
   if (!mounted) return null;
@@ -35,7 +55,9 @@ const Signup = () => {
                 id="student"
                 name="type"
                 value="student"
+                checked={formData.type === "student"}
                 defaultChecked
+                onChange={handleChange}
               />
               <CustomRadio htmlFor="student">
                 <UncheckedIcon src="/assets/disable.svg" alt="Unchecked" />
@@ -49,6 +71,8 @@ const Signup = () => {
                 id="expert"
                 name="type"
                 value="expert"
+                checked={formData.type === "expert"}
+                onChange={handleChange}
               />
               <CustomRadio htmlFor="expert">
                 <UncheckedIcon src="/assets/disable.svg" alt="Unchecked" />
@@ -60,15 +84,31 @@ const Signup = () => {
         </SignupGroup>
         <SignupGroup>
           <Grouplabel>이름</Grouplabel>
-          <Input placeholder="이름을 입력해주세요" />
+          <Input
+            name="displayName"
+            placeholder="이름을 입력해주세요"
+            value={formData.displayName}
+            onChange={handleChange}
+          />
         </SignupGroup>
         <SignupGroup>
           <Grouplabel>이메일</Grouplabel>
-          <Input placeholder="이메일을 입력해주세요" />
+          <Input
+            name="email"
+            placeholder="이메일을 입력해주세요"
+            value={formData.email}
+            onChange={handleChange}
+          />
         </SignupGroup>
         <SignupGroup>
           <Grouplabel>비밀번호</Grouplabel>
-          <Input type="password" placeholder="비밀번호를 입력해주세요" />
+          <Input
+            type="password"
+            name="password"
+            placeholder="비밀번호를 입력해주세요"
+            value={formData.password}
+            onChange={handleChange}
+          />
         </SignupGroup>
         <StartButton onClick={handleSignupClick}>Wingle 가입하기</StartButton>
       </LoginBox>
