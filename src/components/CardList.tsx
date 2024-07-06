@@ -263,6 +263,7 @@ const CategoryTitle = styled.label`
   font-size: 16px;
   color: #303033;
   transition: color 0.3s;
+  cursor: pointer;
 
   &:hover {
     color: #ffffff;
@@ -312,6 +313,7 @@ const CategorySub = styled.label`
   font-size: 14px;
   color: #737585;
   padding-bottom: 10px;
+  cursor: pointer;
 
   &:hover ${CategoryTitle} {
     color: #f7f8f9;
