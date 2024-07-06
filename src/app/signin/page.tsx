@@ -55,8 +55,12 @@ const Signin = () => {
         </LoginInputGroup>
         <SocialLoginGroup>
           <LoginLabel>소셜 로그인</LoginLabel>
-          <KakaoLogin onClick={handleKakaoLogin}>카카오톡으로 시작</KakaoLogin>
+          <KakaoLogin onClick={handleKakaoLogin}>
+            <KakaoIcon src="/assets/kakao.svg" />
+            카카오톡으로 시작
+          </KakaoLogin>
           <GoogleLogin onClick={handleGoogleLogin}>
+            <GoogleIcon src="/assets/google.png" />
             구글 이메일로 시작
           </GoogleLogin>
         </SocialLoginGroup>
@@ -193,6 +197,12 @@ const LoginInput = styled.input`
   }
 `;
 
+const KakaoIcon = styled.img`
+  width: 20px;
+  height: 20px;
+  padding-right: 10px;
+`;
+
 const KakaoLogin = styled.div`
   display: flex;
   flex-direction: row;
@@ -212,6 +222,12 @@ const KakaoLogin = styled.div`
     height: 40px;
     font-size: 14px;
   }
+`;
+
+const GoogleIcon = styled.img`
+  width: 20px;
+  height: 20px;
+  padding-right: 10px;
 `;
 
 const GoogleLogin = styled.div`
