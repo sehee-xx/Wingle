@@ -4,6 +4,10 @@ import axios from "axios";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import styled from "styled-components";
+import withReactContent from "sweetalert2-react-content";
+import Swal from "sweetalert2";
+
+const MySwal = withReactContent(Swal);
 
 const Signup = () => {
   const [mounted, setMounted] = useState(false);
@@ -13,7 +17,9 @@ const Signup = () => {
     email: "",
     password: "",
     displayName: "",
+    confirmPassword: "",
   });
+  const [passwordMatch, setPasswordMatch] = useState(true);
 
   useEffect(() => {
     setMounted(true);
@@ -26,17 +32,115 @@ const Signup = () => {
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({ ...prevData, [name]: value }));
+    if (name === "password" || name === "confirmPassword") {
+      setPasswordMatch(
+        name === "password"
+          ? value === formData.confirmPassword
+          : formData.password === value
+      );
+    }
   };
 
   const handleSignupClick = async () => {
+    if (!passwordMatch) {
+      if (window.innerWidth <= 768) {
+        MySwal.fire({
+          icon: "error",
+          title: "비밀번호 불일치",
+          text: "다시 한번 확인해주세요!",
+          toast: true,
+          position: "top-end",
+          showConfirmButton: false,
+          timer: 1000,
+          customClass: {
+            popup: "swal-custom-popup",
+            title: "swal-custom-title",
+            htmlContainer: "swal-custom-html-container",
+          },
+        });
+      } else {
+        MySwal.fire({
+          icon: "error",
+          title: "비밀번호 불일치",
+          text: "다시 한번 확인해주세요!",
+          confirmButtonText: "확인",
+          confirmButtonColor: "#FF812E",
+          customClass: {
+            popup: "swal-custom-popup",
+            title: "swal-custom-title",
+            htmlContainer: "swal-custom-html-container",
+          },
+        });
+      }
+      return;
+    }
+
     try {
       const response = await axios.post(
         `${process.env.BACKEND_HOSTNAME}/accounts/signup`,
         formData
       );
+      if (window.innerWidth <= 768) {
+        MySwal.fire({
+          icon: "success",
+          title: "회원가입 성공",
+          text: "윙그리가 되었습니다!",
+          toast: true,
+          position: "top-end",
+          showConfirmButton: false,
+          timer: 1000,
+          customClass: {
+            popup: "swal-custom-popup",
+            title: "swal-custom-title",
+            htmlContainer: "swal-custom-html-container",
+          },
+        });
+      } else {
+        MySwal.fire({
+          icon: "success",
+          title: "회원가입 성공",
+          text: "윙그리가 되었습니다!",
+          confirmButtonText: "확인",
+          confirmButtonColor: "#FF812E",
+          customClass: {
+            popup: "swal-custom-popup",
+            title: "swal-custom-title",
+            htmlContainer: "swal-custom-html-container",
+          },
+        });
+      }
       router.push("/signin");
     } catch (error) {
       console.log("Signup failed", error);
+      if (window.innerWidth <= 768) {
+        MySwal.fire({
+          icon: "error",
+          title: "회원가입 실패",
+          text: "다시 한번 확인해주세요!",
+          toast: true,
+          position: "top-end",
+          showConfirmButton: false,
+          timer: 1000,
+          customClass: {
+            popup: "swal-custom-popup",
+            title: "swal-custom-title",
+            htmlContainer: "swal-custom-html-container",
+          },
+        });
+      } else {
+        MySwal.fire({
+          icon: "error",
+          title: "회원가입 실패",
+          text: "다시 한번 확인해주세요!",
+          confirmButtonText: "확인",
+          confirmButtonColor: "#FF812E",
+          customClass: {
+            popup: "swal-custom-popup",
+            title: "swal-custom-title",
+            htmlContainer: "swal-custom-html-container",
+          },
+        });
+      }
     }
   };
 
@@ -107,6 +211,16 @@ const Signup = () => {
             name="password"
             placeholder="비밀번호를 입력해주세요"
             value={formData.password}
+            onChange={handleChange}
+          />
+        </SignupGroup>
+        <SignupGroup>
+          <Grouplabel>비밀번호 확인</Grouplabel>
+          <Input
+            type="password"
+            name="confirmPassword"
+            placeholder="비밀번호를 다시 입력해주세요"
+            value={formData.confirmPassword}
             onChange={handleChange}
           />
         </SignupGroup>
