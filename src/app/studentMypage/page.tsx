@@ -20,7 +20,7 @@ const StudentMypage = () => {
             </DropdownWrapper>
           </NameBox>
           <PostCard>
-            <PostCardImg src="/assets/card/card1.png" />
+            <PostCardImg src="/assets/card/card13.png" />
             <PostInfo>
               <PostName>게시물 이름</PostName>
               <PostSubData>업로드 날짜</PostSubData>
@@ -32,7 +32,7 @@ const StudentMypage = () => {
             </PostInfo>
           </PostCard>
           <PostCard>
-            <PostCardImg src="/assets/card/card2.png" />
+            <PostCardImg src="/assets/card/card14.png" />
             <PostInfo>
               <PostName>게시물 이름</PostName>
               <PostSubData>업로드 날짜</PostSubData>
@@ -44,7 +44,7 @@ const StudentMypage = () => {
             </PostInfo>
           </PostCard>
           <PostCard>
-            <PostCardImg src="/assets/card/card3.png" />
+            <PostCardImg src="/assets/card/card15.png" />
             <PostInfo>
               <PostName>게시물 이름</PostName>
               <PostSubData>업로드 날짜</PostSubData>
@@ -56,7 +56,7 @@ const StudentMypage = () => {
             </PostInfo>
           </PostCard>
           <PostCard>
-            <PostCardImg src="/assets/card/card4.png" />
+            <PostCardImg src="/assets/card/card16.png" />
             <PostInfo>
               <PostName>게시물 이름</PostName>
               <PostSubData>업로드 날짜</PostSubData>
@@ -68,7 +68,7 @@ const StudentMypage = () => {
             </PostInfo>
           </PostCard>
           <PostCard>
-            <PostCardImg src="/assets/card/card5.png" />
+            <PostCardImg src="/assets/card/card17.png" />
             <PostInfo>
               <PostName>게시물 이름</PostName>
               <PostSubData>업로드 날짜</PostSubData>
@@ -80,7 +80,7 @@ const StudentMypage = () => {
             </PostInfo>
           </PostCard>
           <PostCard>
-            <PostCardImg src="/assets/card/card6.png" />
+            <PostCardImg src="/assets/card/card18.png" />
             <PostInfo>
               <PostName>게시물 이름</PostName>
               <PostSubData>업로드 날짜</PostSubData>
@@ -92,7 +92,7 @@ const StudentMypage = () => {
             </PostInfo>
           </PostCard>
           <PostCard>
-            <PostCardImg src="/assets/card/card7.png" />
+            <PostCardImg src="/assets/card/card19.png" />
             <PostInfo>
               <PostName>게시물 이름</PostName>
               <PostSubData>업로드 날짜</PostSubData>
@@ -104,7 +104,7 @@ const StudentMypage = () => {
             </PostInfo>
           </PostCard>
           <PostCard>
-            <PostCardImg src="/assets/card/card8.png" />
+            <PostCardImg src="/assets/card/card20.png" />
             <PostInfo>
               <PostName>게시물 이름</PostName>
               <PostSubData>업로드 날짜</PostSubData>
@@ -116,7 +116,7 @@ const StudentMypage = () => {
             </PostInfo>
           </PostCard>
           <PostCard>
-            <PostCardImg src="/assets/card/card9.png" />
+            <PostCardImg src="/assets/card/card21.png" />
             <PostInfo>
               <PostName>게시물 이름</PostName>
               <PostSubData>업로드 날짜</PostSubData>
@@ -128,7 +128,7 @@ const StudentMypage = () => {
             </PostInfo>
           </PostCard>
           <PostCard>
-            <PostCardImg src="/assets/card/card10.png" />
+            <PostCardImg src="/assets/card/card22.png" />
             <PostInfo>
               <PostName>게시물 이름</PostName>
               <PostSubData>업로드 날짜</PostSubData>
@@ -140,7 +140,7 @@ const StudentMypage = () => {
             </PostInfo>
           </PostCard>
           <PostCard>
-            <PostCardImg src="/assets/card/card11.png" />
+            <PostCardImg src="/assets/card/card23.png" />
             <PostInfo>
               <PostName>게시물 이름</PostName>
               <PostSubData>업로드 날짜</PostSubData>
@@ -152,7 +152,7 @@ const StudentMypage = () => {
             </PostInfo>
           </PostCard>
           <PostCard>
-            <PostCardImg src="/assets/card/card12.png" />
+            <PostCardImg src="/assets/card/card24.png" />
             <PostInfo>
               <PostName>게시물 이름</PostName>
               <PostSubData>업로드 날짜</PostSubData>
