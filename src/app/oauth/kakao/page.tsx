@@ -5,6 +5,10 @@ import { useEffect, useRef } from "react";
 import axios from "axios";
 import Loading from "../../../components/Loading";
 import { Suspense } from "react";
+import withReactContent from "sweetalert2-react-content";
+import Swal from "sweetalert2";
+
+const MySwal = withReactContent(Swal);
 
 const KakaoRedirect = () => {
   const router = useRouter();
@@ -39,10 +43,68 @@ const KakaoRedirect = () => {
         console.log("Response:", response.data);
         const { token } = response.data;
         localStorage.setItem("token", token);
-        router.push("/signin");
+        if (window.innerWidth <= 768) {
+          MySwal.fire({
+            icon: "success",
+            title: "로그인 성공",
+            text: "성공적으로 로그인되었습니다!",
+            toast: true,
+            position: "top-end",
+            showConfirmButton: false,
+            timer: 1000,
+            customClass: {
+              popup: "swal-custom-popup",
+              title: "swal-custom-title",
+              htmlContainer: "swal-custom-html-container",
+            },
+          });
+        } else {
+          MySwal.fire({
+            icon: "success",
+            title: "로그인 성공",
+            text: "성공적으로 로그인되었습니다!",
+            confirmButtonText: "확인",
+            confirmButtonColor: "#FF812E",
+            customClass: {
+              popup: "swal-custom-popup",
+              title: "swal-custom-title",
+              htmlContainer: "swal-custom-html-container",
+            },
+          });
+        }
+        router.push("/");
       } catch (error) {
         console.error("로그인 실패", error);
-        router.push("/");
+        if (window.innerWidth <= 768) {
+          MySwal.fire({
+            icon: "error",
+            title: "로그인 실패",
+            text: "이메일 또는 비밀번호가 잘못되었습니다.",
+            toast: true,
+            position: "top-end",
+            showConfirmButton: false,
+            timer: 1000,
+            customClass: {
+              popup: "swal-custom-popup",
+              title: "swal-custom-title",
+              htmlContainer: "swal-custom-html-container",
+            },
+          });
+        } else {
+          MySwal.fire({
+            icon: "error",
+            title: "로그인 실패",
+            text: "이메일 또는 비밀번호가 잘못되었습니다.",
+            confirmButtonText: "확인",
+            confirmButtonColor: "#FF812E",
+            customClass: {
+              popup: "swal-custom-popup",
+              title: "swal-custom-title",
+              htmlContainer: "swal-custom-html-container",
+            },
+          });
+        }
+        router.push("/signin");
       }
     };
 
