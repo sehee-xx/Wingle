@@ -5,14 +5,25 @@ import styled from "styled-components";
 
 const CardList = () => {
   const [mounted, setMounted] = useState(false);
+  const [likedCards, setLikedCards] = useState<number[]>([]);
   const router = useRouter();
 
   useEffect(() => {
     setMounted(true);
   }, []);
 
-  const handleCardClick = (id) => {
+  const handleCardClick = (id: number) => {
     router.push(`/card/${id}`);
+  };
+
+  const toggleLike = (id: number) => {
+    setLikedCards((prev) =>
+      prev.includes(id) ? prev.filter((cardId) => cardId !== id) : [...prev, id]
+    );
+  };
+
+  const handleCategoryClick = (category: string) => {
+    router.push(`/category/${category}`);
   };
 
   if (!mounted) return null;
@@ -25,30 +36,36 @@ const CardList = () => {
           <ShowTotal onClick={() => router.push("/card")}>전체보기</ShowTotal>
         </CardHeader>
         <CardListBox>
-          <Card onClick={() => handleCardClick(1)}>
-            <CardImg src="/assets/card1.png" alt="Card 1" />
-            <CardInnerTitle>강아지 간식 만들기 체험</CardInnerTitle>
-            <CardPrice>45,000원~</CardPrice>
-            <CardExpertName>신진영</CardExpertName>
-          </Card>
-          <Card onClick={() => handleCardClick(2)}>
-            <CardImg src="/assets/card2.png" alt="Card 2" />
-            <CardInnerTitle>강남-해금무드: 해금 체험</CardInnerTitle>
-            <CardPrice>90,000원~</CardPrice>
-            <CardExpertName>양세희</CardExpertName>
-          </Card>
-          <Card onClick={() => handleCardClick(3)}>
-            <CardImg src="/assets/card3.png" alt="Card 3" />
-            <CardInnerTitle>명함 만들기 체험</CardInnerTitle>
-            <CardPrice>55,000원~</CardPrice>
-            <CardExpertName>박상우</CardExpertName>
-          </Card>
-          <Card onClick={() => handleCardClick(4)}>
-            <CardImg src="/assets/card4.png" alt="Card 4" />
-            <CardInnerTitle>일러스트 원데이 클래스</CardInnerTitle>
-            <CardPrice>65,000원~</CardPrice>
-            <CardExpertName>하은수</CardExpertName>
-          </Card>
+          {renderCards([
+            {
+              id: 1,
+              title: "강아지 간식 만들기 체험",
+              price: "45,000원~",
+              expert: "신진영",
+              img: "/assets/card/card1.png",
+            },
+            {
+              id: 2,
+              title: "강남-해금무드: 해금 체험",
+              price: "90,000원~",
+              expert: "양세희",
+              img: "/assets/card/card2.png",
+            },
+            {
+              id: 3,
+              title: "명함 만들기 체험",
+              price: "55,000원~",
+              expert: "박상우",
+              img: "/assets/card/card3.png",
+            },
+            {
+              id: 4,
+              title: "일러스트 원데이 클래스",
+              price: "65,000원~",
+              expert: "하은수",
+              img: "/assets/card/card4.png",
+            },
+          ])}
         </CardListBox>
       </CardBox>
       <CardBox>
@@ -57,52 +74,56 @@ const CardList = () => {
           <ShowTotal onClick={() => router.push("/card")}>전체보기</ShowTotal>
         </CardHeader>
         <CardListBox>
-          <Card onClick={() => handleCardClick(5)}>
-            <CardImg src="/assets/card5.png" alt="Card 5" />
-            <CardInnerTitle>나만의 향수 만들기 원데이 클래스</CardInnerTitle>
-            <CardPrice>55,000원~</CardPrice>
-            <CardExpertName>조승완</CardExpertName>
-          </Card>
-          <Card onClick={() => handleCardClick(6)}>
-            <CardImg src="/assets/card6.png" alt="Card 6" />
-            <CardInnerTitle>앙금 꽃 케이크 만들기-힐링</CardInnerTitle>
-            <CardPrice>80,000원~</CardPrice>
-            <CardExpertName>주서현</CardExpertName>
-          </Card>
-          <Card onClick={() => handleCardClick(7)}>
-            <CardImg src="/assets/card7.png" alt="Card 7" />
-            <CardInnerTitle>CNC를 이용한 목공 원데이 클래스</CardInnerTitle>
-            <CardPrice>60,000원~</CardPrice>
-            <CardExpertName>안규찬</CardExpertName>
-          </Card>
-          <Card onClick={() => handleCardClick(8)}>
-            <CardImg src="/assets/card8.png" alt="Card 8" />
-            <CardInnerTitle>아름다운 꽃꽂이 쉽게 알려드려요</CardInnerTitle>
-            <CardPrice>75,000원~</CardPrice>
-            <CardExpertName>김민경</CardExpertName>
-          </Card>
+          {renderCards([
+            {
+              id: 5,
+              title: "나만의 향수 만들기 원데이 클래스",
+              price: "55,000원~",
+              expert: "조승완",
+              img: "/assets/card/card5.png",
+            },
+            {
+              id: 6,
+              title: "앙금 꽃 케이크 만들기-힐링",
+              price: "80,000원~",
+              expert: "주서현",
+              img: "/assets/card/card6.png",
+            },
+            {
+              id: 7,
+              title: "CNC를 이용한 목공 원데이 클래스",
+              price: "60,000원~",
+              expert: "안규찬",
+              img: "/assets/card/card7.png",
+            },
+            {
+              id: 8,
+              title: "아름다운 꽃꽂이 쉽게 알려드려요",
+              price: "75,000원~",
+              expert: "김민경",
+              img: "/assets/card/card8.png",
+            },
+          ])}
         </CardListBox>
       </CardBox>
       <CardBox>
         <CardTitle>
           이런 카테고리는 어때요?
           <CategoryListBox>
-            <Category>
-              <CategorySub>감성공방</CategorySub>
-              <CategoryTitle>공방 원데이 클래스</CategoryTitle>
-            </Category>
-            <Category>
-              <CategorySub>취미 레슨</CategorySub>
-              <CategoryTitle>악기 레슨</CategoryTitle>
-            </Category>
-            <Category>
-              <CategorySub>사진</CategorySub>
-              <CategoryTitle>사진명소에서 사진 찍기</CategoryTitle>
-            </Category>
-            <Category>
-              <CategorySub>조향</CategorySub>
-              <CategoryTitle>나만의 향수 만들기</CategoryTitle>
-            </Category>
+            {renderCategories([
+              {
+                sub: "그림",
+                title: "일러스트 클래스",
+                category: "illustration",
+              },
+              { sub: "취미 레슨", title: "악기 레슨", category: "instrument" },
+              {
+                sub: "사진",
+                title: "사진명소에서 사진 찍기",
+                category: "photography",
+              },
+              { sub: "조향", title: "나만의 향수 만들기", category: "perfume" },
+            ])}
           </CategoryListBox>
         </CardTitle>
       </CardBox>
@@ -112,34 +133,76 @@ const CardList = () => {
           <ShowTotal onClick={() => router.push("/card")}>전체보기</ShowTotal>
         </CardHeader>
         <CardListBox>
-          <Card onClick={() => handleCardClick(9)}>
-            <CardImg src="/assets/card9.png" alt="Card 9" />
-            <CardInnerTitle>나도 밴드체험 한번 해볼까?</CardInnerTitle>
-            <CardPrice>35,000원~</CardPrice>
-            <CardExpertName>김서영</CardExpertName>
-          </Card>
-          <Card onClick={() => handleCardClick(10)}>
-            <CardImg src="/assets/card10.png" alt="Card 10" />
-            <CardInnerTitle>술술 놀면서 수제 맥주 만들기</CardInnerTitle>
-            <CardPrice>50,000원~</CardPrice>
-            <CardExpertName>윤우성</CardExpertName>
-          </Card>
-          <Card onClick={() => handleCardClick(11)}>
-            <CardImg src="/assets/card11.png" alt="Card 11" />
-            <CardInnerTitle>나만의 퍼스널컬러, 골격진단</CardInnerTitle>
-            <CardPrice>59,900원~</CardPrice>
-            <CardExpertName>김예락</CardExpertName>
-          </Card>
-          <Card onClick={() => handleCardClick(12)}>
-            <CardImg src="/assets/card12.png" alt="Card 12" />
-            <CardInnerTitle>[앙렉스x서핑캠프]-시원한 서핑</CardInnerTitle>
-            <CardPrice>190,000원~</CardPrice>
-            <CardExpertName>강승완</CardExpertName>
-          </Card>
+          {renderCards([
+            {
+              id: 9,
+              title: "나도 밴드체험 한번 해볼까?",
+              price: "35,000원~",
+              expert: "김서영",
+              img: "/assets/card/card9.png",
+            },
+            {
+              id: 10,
+              title: "술술 놀면서 수제 맥주 만들기",
+              price: "50,000원~",
+              expert: "윤우성",
+              img: "/assets/card/card10.png",
+            },
+            {
+              id: 11,
+              title: "나만의 퍼스널컬러, 골격진단",
+              price: "59,900원~",
+              expert: "김예락",
+              img: "/assets/card/card11.png",
+            },
+            {
+              id: 12,
+              title: "[앙렉스x서핑캠프]-시원한 서핑",
+              price: "190,000원~",
+              expert: "강승완",
+              img: "/assets/card/card12.png",
+            },
+          ])}
         </CardListBox>
       </CardBox>
     </>
   );
+
+  function renderCards(cards) {
+    return cards.map((card) => (
+      <Card key={card.id}>
+        <CardImg
+          src={card.img}
+          alt={`Card ${card.id}`}
+          onClick={() => handleCardClick(card.id)}
+        />
+        <LikeIcon
+          src={
+            likedCards.includes(card.id)
+              ? "/assets/fillHeart.png"
+              : "/assets/emptyHeart.png"
+          }
+          alt="Like Icon"
+          onClick={() => toggleLike(card.id)}
+        />
+        <CardInnerTitle>{card.title}</CardInnerTitle>
+        <CardPrice>{card.price}</CardPrice>
+        <CardExpertName>{card.expert}</CardExpertName>
+      </Card>
+    ));
+  }
+
+  function renderCategories(categories) {
+    return categories.map((category, index) => (
+      <Category
+        key={index}
+        onClick={() => handleCategoryClick(category.category)}
+      >
+        <CategorySub>{category.sub}</CategorySub>
+        <CategoryTitle>{category.title}</CategoryTitle>
+      </Category>
+    ));
+  }
 };
 
 export default CardList;
@@ -195,6 +258,7 @@ const CardListBox = styled.div`
 `;
 
 const Card = styled.div`
+  position: relative;
   display: flex;
   flex-direction: column;
   width: 300px;
@@ -252,7 +316,7 @@ const CategoryListBox = styled.div`
   justify-content: space-around;
   gap: 10px;
   margin-top: 10px;
-  margin-bottom: 30px;
+  margin-bottom: 20px;
 
   @media (max-width: 768px) {
     margin-bottom: 0px;
@@ -322,4 +386,13 @@ const CategorySub = styled.label`
   @media (max-width: 480px) {
     padding-bottom: 0px;
   }
+`;
+
+const LikeIcon = styled.img`
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 30px;
+  height: 30px;
+  cursor: pointer;
 `;
