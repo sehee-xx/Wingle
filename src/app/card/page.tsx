@@ -30,9 +30,12 @@ const CardList = () => {
           <CreateClass onClick={handleCreateClick}>클래스 등록하기</CreateClass>
         </SortFilterWrapper>
         <CardContainer>
-          {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].map((card, index) => (
+          {[
+            1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19,
+            20, 21, 22, 23, 24,
+          ].map((card, index) => (
             <Card key={index} onClick={() => handleCardClick(card)}>
-              <CardImg src={`/assets/card${card}.png`} />
+              <CardImg src={`/assets/card/card${card}.png`} />
               <CardContent>
                 <CardTitle>카드 제목 {card}</CardTitle>
                 <CardDescription>
