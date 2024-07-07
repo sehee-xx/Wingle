@@ -54,9 +54,9 @@ const CardDetail = () => {
         <TopInfoBox>
           <ImageCarousel>
             <Carousel showArrows={true} infiniteLoop={true} showThumbs={false}>
-              <Image src="/assets/card1.png" alt="Class Image" />
-              <Image src="/assets/card2.png" alt="Class Image" />
-              <Image src="/assets/card3.png" alt="Class Image" />
+              <Image src="/assets/card/card1.png" alt="Class Image" />
+              <Image src="/assets/card/card2.png" alt="Class Image" />
+              <Image src="/assets/card/card3.png" alt="Class Image" />
             </Carousel>
           </ImageCarousel>
           <TopRightInfo>
