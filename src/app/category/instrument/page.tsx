@@ -92,4 +92,8 @@ const Photo = styled.img`
   &:nth-child(odd) {
     transform: rotate(${() => Math.random() * 10 - 5}deg) translateY(10px);
   }
+
+  &:hover {
+    transform: scale(1.05);
+  }
 `;
