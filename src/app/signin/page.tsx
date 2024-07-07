@@ -9,7 +9,6 @@ import styled from "styled-components";
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
 import "../../styles/sweetalert.css";
-import { useMediaQuery } from "react-responsive";
 
 const MySwal = withReactContent(Swal);
 
@@ -18,8 +17,6 @@ const Signin = () => {
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
-  const isMobile = useMediaQuery({ query: "(max-width: 768px)" });
 
   useEffect(() => {
     setMounted(true);
