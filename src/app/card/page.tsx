@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import Header from "../../components/Header";
 import { useRouter } from "next/navigation";
@@ -7,16 +7,24 @@ import { useRouter } from "next/navigation";
 const CardList = () => {
   const router = useRouter();
   const [searchQuery, setSearchQuery] = useState("");
+  const [userType, setUserType] = useState<string>("");
+
+  useEffect(() => {
+    const storedUserType = localStorage.getItem("userType");
+    if (storedUserType) {
+      setUserType(storedUserType);
+    }
+  }, []);
 
   const handleCreateClick = () => {
     router.push("/createClass");
   };
 
-  const handleCardClick = (id) => {
+  const handleCardClick = (id: number) => {
     router.push(`/card/${id}`);
   };
 
-  const handleSearchChange = (e) => {
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchQuery(e.target.value);
   };
 
@@ -209,7 +217,11 @@ const CardList = () => {
           <SortFilterButton>최신순</SortFilterButton>
           <SortFilterButton>인기순</SortFilterButton>
           <SortFilterButton>가격순</SortFilterButton>
-          <CreateClass onClick={handleCreateClick}>클래스 등록하기</CreateClass>
+          {userType === "expert" && (
+            <CreateClass onClick={handleCreateClick}>
+              클래스 등록하기
+            </CreateClass>
+          )}
         </SortFilterWrapper>
         <CardContainer>
           {filteredCards.map((card) => (
