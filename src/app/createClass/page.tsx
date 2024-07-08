@@ -84,7 +84,7 @@ const CreateClass = () => {
         icon: "success",
         title: "클래스가 등록되었습니다!",
       });
-      // router.push("/card");
+      router.push("/expertMypage");
     } catch (error) {
       console.error("Failed to create class:", error, error.message);
       Swal.fire({
