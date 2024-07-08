@@ -1,25 +1,160 @@
 "use client";
-import { useRouter } from "next/navigation";
+
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
+import axios from "axios";
+import { useRouter } from "next/navigation";
+import Swal from "sweetalert2";
+
+interface Card {
+  id: number;
+  title: string;
+  name: string;
+  date: string;
+  isFavorite: boolean;
+  participants: number;
+  currentParticipants: number;
+  phone: string;
+  description: string;
+  image: string;
+  price: string;
+  content: string;
+  numWishes: number;
+  createdAt: string;
+}
+
+interface CardsData {
+  trending: Card[];
+  choice: Card[];
+  recommended: Card[];
+}
 
 const CardList = () => {
-  const [mounted, setMounted] = useState(false);
-  const [likedCards, setLikedCards] = useState<number[]>([]);
   const router = useRouter();
+  const [mounted, setMounted] = useState(false);
+  const [isStudent, setIsStudent] = useState(false);
+  const [cardsData, setCardsData] = useState<CardsData>({
+    trending: [],
+    choice: [],
+    recommended: [],
+  });
 
   useEffect(() => {
-    setMounted(true);
+    const initialize = async () => {
+      const userType = localStorage.getItem("userType");
+      if (userType === "student") {
+        setIsStudent(true);
+      }
+      await fetchCardsData();
+      setMounted(true);
+    };
+    initialize();
   }, []);
+
+  const fetchCardsData = async () => {
+    try {
+      const response = await axios.get(
+        `${process.env.BACKEND_HOSTNAME}/courses`,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
+      setCardsData({
+        trending: response.data.trending,
+        choice: response.data.choice,
+        recommended: response.data.recommended,
+      });
+      console.log("Fetched cards data:", response.data);
+    } catch (error) {
+      Swal.fire({
+        icon: "error",
+        title: "Failed to fetch cards",
+        text: error.response ? error.response.data.message : error.message,
+      });
+    }
+  };
 
   const handleCardClick = (id: number) => {
     router.push(`/card/${id}`);
   };
 
-  const toggleLike = (id: number) => {
-    setLikedCards((prev) =>
-      prev.includes(id) ? prev.filter((cardId) => cardId !== id) : [...prev, id]
-    );
+  const toggleLike = async (card: Card) => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      Swal.fire({
+        icon: "warning",
+        title: "Unauthorized",
+        text: "Please log in to add to your wish list.",
+      });
+      return;
+    }
+
+    console.log("Current card before toggle:", card);
+    const isLiked = card.isFavorite;
+    console.log(`Toggling like for card ${card.id}:`, isLiked);
+
+    // UI를 먼저 업데이트하여 즉시 반영
+    updateCardFavoriteStatus(card.id, !isLiked);
+
+    try {
+      if (isLiked) {
+        const response = await axios.delete(
+          `${process.env.BACKEND_HOSTNAME}/courses/${card.id}/wish`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        if (response.status !== 200) {
+          throw new Error("Failed to delete from wishlist");
+        }
+      } else {
+        const response = await axios.post(
+          `${process.env.BACKEND_HOSTNAME}/courses/${card.id}/wish`,
+          {},
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        if (response.status > 201) {
+          throw new Error("Failed to add to wishlist");
+        }
+      }
+    } catch (error) {
+      if (error.response && error.response.status === 409) {
+        Swal.fire({
+          icon: "info",
+          title: "Already in wish list",
+          text: "This item is already in your wish list.",
+        });
+      } else {
+        Swal.fire({
+          icon: "error",
+          title: "Failed to toggle like",
+          text: error.response ? error.response.data.message : error.message,
+        });
+      }
+    }
+  };
+
+  const updateCardFavoriteStatus = (id: number, isFavorite: boolean) => {
+    setCardsData((prevState) => {
+      const updateCards = (cards: Card[]) =>
+        cards.map((card) => (card.id === id ? { ...card, isFavorite } : card));
+
+      return {
+        trending: updateCards(prevState.trending),
+        choice: updateCards(prevState.choice),
+        recommended: updateCards(prevState.recommended),
+      };
+    });
   };
 
   const handleCategoryClick = (category: string) => {
@@ -28,82 +163,26 @@ const CardList = () => {
 
   if (!mounted) return null;
 
+  console.log("Current cards data:", cardsData);
+
   return (
     <>
       <CardBox>
         <CardHeader>
-          <CardTitle>현재 가장 인기있는 서비스</CardTitle>
+          <CardTitle>최근 생긴 클래스</CardTitle>
           <ShowTotal onClick={() => router.push("/card")}>전체보기</ShowTotal>
         </CardHeader>
         <CardListBox>
-          {renderCards([
-            {
-              id: 1,
-              title: "강아지 간식 만들기 체험",
-              price: "45,000원~",
-              expert: "신진영",
-              img: "/assets/card/card1.png",
-            },
-            {
-              id: 2,
-              title: "강남-해금무드: 해금 체험",
-              price: "90,000원~",
-              expert: "양세희",
-              img: "/assets/card/card2.png",
-            },
-            {
-              id: 3,
-              title: "명함 만들기 체험",
-              price: "55,000원~",
-              expert: "박상우",
-              img: "/assets/card/card3.png",
-            },
-            {
-              id: 4,
-              title: "일러스트 원데이 클래스",
-              price: "65,000원~",
-              expert: "하은수",
-              img: "/assets/card/card4.png",
-            },
-          ])}
+          {renderCards(cardsData?.trending?.slice(0, 4) || [])}
         </CardListBox>
       </CardBox>
       <CardBox>
         <CardHeader>
-          <CardTitle>윙글이 추천하는 서비스</CardTitle>
+          <CardTitle>찜하기 많은 클래스</CardTitle>
           <ShowTotal onClick={() => router.push("/card")}>전체보기</ShowTotal>
         </CardHeader>
         <CardListBox>
-          {renderCards([
-            {
-              id: 5,
-              title: "나만의 향수 만들기 원데이 클래스",
-              price: "55,000원~",
-              expert: "조승완",
-              img: "/assets/card/card5.png",
-            },
-            {
-              id: 6,
-              title: "앙금 꽃 케이크 만들기-힐링",
-              price: "80,000원~",
-              expert: "주서현",
-              img: "/assets/card/card6.png",
-            },
-            {
-              id: 7,
-              title: "CNC를 이용한 목공 원데이 클래스",
-              price: "60,000원~",
-              expert: "안규찬",
-              img: "/assets/card/card7.png",
-            },
-            {
-              id: 8,
-              title: "아름다운 꽃꽂이 쉽게 알려드려요",
-              price: "75,000원~",
-              expert: "김민경",
-              img: "/assets/card/card8.png",
-            },
-          ])}
+          {renderCards(cardsData?.choice?.slice(0, 4) || [])}
         </CardListBox>
       </CardBox>
       <CardBox>
@@ -129,65 +208,43 @@ const CardList = () => {
       </CardBox>
       <CardBox>
         <CardHeader>
-          <CardTitle>다른 회원들이 많이 찾는 서비스</CardTitle>
+          <CardTitle>윙글이 추천하는 클래스</CardTitle>
           <ShowTotal onClick={() => router.push("/card")}>전체보기</ShowTotal>
         </CardHeader>
         <CardListBox>
-          {renderCards([
-            {
-              id: 9,
-              title: "나도 밴드체험 한번 해볼까?",
-              price: "35,000원~",
-              expert: "김서영",
-              img: "/assets/card/card9.png",
-            },
-            {
-              id: 10,
-              title: "술술 놀면서 수제 맥주 만들기",
-              price: "50,000원~",
-              expert: "윤우성",
-              img: "/assets/card/card10.png",
-            },
-            {
-              id: 11,
-              title: "나만의 퍼스널컬러, 골격진단",
-              price: "59,900원~",
-              expert: "김예락",
-              img: "/assets/card/card11.png",
-            },
-            {
-              id: 12,
-              title: "[앙렉스x서핑캠프]-시원한 서핑",
-              price: "190,000원~",
-              expert: "강승완",
-              img: "/assets/card/card12.png",
-            },
-          ])}
+          {renderCards(cardsData?.recommended?.slice(0, 4) || [])}
         </CardListBox>
       </CardBox>
     </>
   );
 
-  function renderCards(cards) {
-    return cards.map((card) => (
+  function renderCards(cards: Card[]) {
+    if (cards?.length === 0) {
+      console.log("No cards to display");
+      return <p>No cards available</p>;
+    }
+
+    return cards?.map((card) => (
       <Card key={card.id}>
         <CardImg
-          src={card.img}
+          src={card.image}
           alt={`Card ${card.id}`}
           onClick={() => handleCardClick(card.id)}
         />
-        <LikeIcon
-          src={
-            likedCards.includes(card.id)
-              ? "/assets/fillHeart.png"
-              : "/assets/emptyHeart.png"
-          }
-          alt="Like Icon"
-          onClick={() => toggleLike(card.id)}
-        />
+        {isStudent && (
+          <LikeIcon
+            src={
+              card.isFavorite
+                ? "/assets/fillHeart.png"
+                : "/assets/emptyHeart.png"
+            }
+            alt="Like Icon"
+            onClick={() => toggleLike(card)}
+          />
+        )}
         <CardInnerTitle>{card.title}</CardInnerTitle>
         <CardPrice>{card.price}</CardPrice>
-        <CardExpertName>{card.expert}</CardExpertName>
+        <CardExpertName>{card.name}</CardExpertName>
       </Card>
     ));
   }
