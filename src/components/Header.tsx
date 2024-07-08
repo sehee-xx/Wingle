@@ -2,13 +2,35 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { useRouter } from "next/navigation";
+import { parseJwt } from "../../utils/jwt";
+import withReactContent from "sweetalert2-react-content";
+import Swal from "sweetalert2";
+
+const MySwal = withReactContent(Swal);
 
 const Header = () => {
   const [mounted, setMounted] = useState(false);
+  const [userInfo, setUserInfo] = useState(null);
+  const [displayName, setDisplayName] = useState("");
+  const [userId, setUserId] = useState("");
+  const [userType, setUserType] = useState("expert");
+  const [token, setToken] = useState("");
   const router = useRouter();
 
   useEffect(() => {
     setMounted(true);
+    const token = localStorage.getItem("token");
+    if (token) {
+      const user = parseJwt(token);
+      setUserInfo(user);
+      setToken(localStorage.getItem("token") ?? "");
+      localStorage.setItem("userId", user?.userId);
+      setUserId(localStorage.getItem("userId") ?? "");
+      localStorage.setItem("userType", user?.type);
+      setUserType(localStorage.getItem("userType") ?? "expert");
+      localStorage.setItem("displayName", user?.displayName);
+      setDisplayName(localStorage.getItem("displayName") ?? "");
+    }
   }, []);
 
   const handleSigninClick = () => {
@@ -16,7 +38,43 @@ const Header = () => {
   };
 
   const handleSignupClick = () => {
-    router.push("/signup");
+    if (localStorage.getItem("token")) {
+      localStorage.removeItem("token");
+      localStorage.removeItem("userId");
+      localStorage.removeItem("userType");
+      localStorage.removeItem("displayName");
+      setUserInfo(null);
+      if (window.innerWidth <= 768) {
+        MySwal.fire({
+          icon: "success",
+          title: "로그아웃 되었습니다!",
+          toast: true,
+          position: "top-end",
+          showConfirmButton: false,
+          timer: 1000,
+          customClass: {
+            popup: "swal-custom-popup",
+            title: "swal-custom-title",
+            htmlContainer: "swal-custom-html-container",
+          },
+        });
+      } else {
+        MySwal.fire({
+          icon: "success",
+          title: "로그아웃 되었습니다!",
+          confirmButtonText: "확인",
+          confirmButtonColor: "#FF812E",
+          customClass: {
+            popup: "swal-custom-popup",
+            title: "swal-custom-title",
+            htmlContainer: "swal-custom-html-container",
+          },
+        });
+      }
+      router.push("/");
+    } else {
+      router.push("/signup");
+    }
   };
 
   const handleLogoClick = () => {
@@ -33,9 +91,22 @@ const Header = () => {
       <HeaderWrapper>
         <Logo onClick={handleLogoClick} src="/assets/logo.svg" alt="Logo" />
         <SignBox>
-          <Signin onClick={handleSigninClick}>로그인</Signin>
-          <Signup onClick={handleSignupClick}>회원가입</Signup>
-          <Profile onClick={handleProfileClick} src="/assets/student.svg" />
+          <Signin onClick={handleSigninClick}>
+            {token
+              ? localStorage.getItem("displayName") + "님 안녕하세요!"
+              : "로그인"}
+          </Signin>
+          <Signup onClick={handleSignupClick}>
+            {token ? "로그아웃" : "회원가입"}
+          </Signup>
+          <Profile
+            onClick={handleProfileClick}
+            src={
+              userType === "student"
+                ? "/assets/student.svg"
+                : "/assets/expert.svg"
+            }
+          />
         </SignBox>
       </HeaderWrapper>
     </>
