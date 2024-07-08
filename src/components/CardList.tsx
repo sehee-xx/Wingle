@@ -404,7 +404,7 @@ const Category = styled.div`
   flex-direction: column;
   justify-content: center;
   width: 200px;
-  height: 100px;
+  height: 110px;
   border-radius: 15px;
   background-color: #e1e1e2;
   padding: 0px 30px;
