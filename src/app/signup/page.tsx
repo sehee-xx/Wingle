@@ -1,17 +1,16 @@
 "use client";
-
 import axios from "axios";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import styled from "styled-components";
-import withReactContent from "sweetalert2-react-content";
 import Swal from "sweetalert2";
+import withReactContent from "sweetalert2-react-content";
+import "../../styles/sweetalert.css";
 
 const MySwal = withReactContent(Swal);
 
 const Signup = () => {
   const [mounted, setMounted] = useState(false);
-  const router = useRouter();
   const [formData, setFormData] = useState({
     type: "student",
     email: "",
@@ -20,10 +19,16 @@ const Signup = () => {
     confirmPassword: "",
   });
   const [passwordMatch, setPasswordMatch] = useState(true);
+  const searchParams = useSearchParams();
+  const socialEmail = searchParams?.get("email");
+  const router = useRouter();
 
   useEffect(() => {
     setMounted(true);
-  }, []);
+    if (socialEmail) {
+      setFormData((prevData) => ({ ...prevData, email: socialEmail }));
+    }
+  }, [socialEmail]);
 
   const handleLogoClick = () => {
     router.push("/");
@@ -43,35 +48,13 @@ const Signup = () => {
 
   const handleSignupClick = async () => {
     if (!passwordMatch) {
-      if (window.innerWidth <= 768) {
-        MySwal.fire({
-          icon: "error",
-          title: "비밀번호 불일치",
-          text: "다시 한번 확인해주세요!",
-          toast: true,
-          position: "top-end",
-          showConfirmButton: false,
-          timer: 1000,
-          customClass: {
-            popup: "swal-custom-popup",
-            title: "swal-custom-title",
-            htmlContainer: "swal-custom-html-container",
-          },
-        });
-      } else {
-        MySwal.fire({
-          icon: "error",
-          title: "비밀번호 불일치",
-          text: "다시 한번 확인해주세요!",
-          confirmButtonText: "확인",
-          confirmButtonColor: "#FF812E",
-          customClass: {
-            popup: "swal-custom-popup",
-            title: "swal-custom-title",
-            htmlContainer: "swal-custom-html-container",
-          },
-        });
-      }
+      MySwal.fire({
+        icon: "error",
+        title: "비밀번호 불일치",
+        text: "다시 한번 확인해주세요!",
+        confirmButtonText: "확인",
+        confirmButtonColor: "#FF812E",
+      });
       return;
     }
 
@@ -80,67 +63,23 @@ const Signup = () => {
         `${process.env.BACKEND_HOSTNAME}/accounts/signup`,
         formData
       );
-      if (window.innerWidth <= 768) {
-        MySwal.fire({
-          icon: "success",
-          title: "회원가입 성공",
-          text: "회원가입에 성공했습니다!",
-          toast: true,
-          position: "top-end",
-          showConfirmButton: false,
-          timer: 1000,
-          customClass: {
-            popup: "swal-custom-popup",
-            title: "swal-custom-title",
-            htmlContainer: "swal-custom-html-container",
-          },
-        });
-      } else {
-        MySwal.fire({
-          icon: "success",
-          title: "회원가입 성공",
-          text: "회원가입에 성공했습니다!",
-          confirmButtonText: "확인",
-          confirmButtonColor: "#FF812E",
-          customClass: {
-            popup: "swal-custom-popup",
-            title: "swal-custom-title",
-            htmlContainer: "swal-custom-html-container",
-          },
-        });
-      }
+      MySwal.fire({
+        icon: "success",
+        title: "회원가입 성공",
+        text: "회원가입에 성공했습니다!",
+        confirmButtonText: "확인",
+        confirmButtonColor: "#FF812E",
+      });
       router.push("/signin");
     } catch (error) {
       console.log("Signup failed", error);
-      if (window.innerWidth <= 768) {
-        MySwal.fire({
-          icon: "error",
-          title: "회원가입 실패",
-          text: "다시 한번 확인해주세요!",
-          toast: true,
-          position: "top-end",
-          showConfirmButton: false,
-          timer: 1000,
-          customClass: {
-            popup: "swal-custom-popup",
-            title: "swal-custom-title",
-            htmlContainer: "swal-custom-html-container",
-          },
-        });
-      } else {
-        MySwal.fire({
-          icon: "error",
-          title: "회원가입 실패",
-          text: "다시 한번 확인해주세요!",
-          confirmButtonText: "확인",
-          confirmButtonColor: "#FF812E",
-          customClass: {
-            popup: "swal-custom-popup",
-            title: "swal-custom-title",
-            htmlContainer: "swal-custom-html-container",
-          },
-        });
-      }
+      MySwal.fire({
+        icon: "error",
+        title: "회원가입 실패",
+        text: "다시 한번 확인해주세요!",
+        confirmButtonText: "확인",
+        confirmButtonColor: "#FF812E",
+      });
     }
   };
 
@@ -202,6 +141,7 @@ const Signup = () => {
             placeholder="이메일을 입력해주세요"
             value={formData.email}
             onChange={handleChange}
+            readOnly={!!socialEmail} // 소셜 로그인으로 넘어온 이메일은 수정 불가
           />
         </SignupGroup>
         <SignupGroup>

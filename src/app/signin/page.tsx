@@ -1,5 +1,3 @@
-// src/app/login/page.tsx
-
 "use client";
 
 import axios from "axios";
@@ -110,6 +108,24 @@ const Signin = () => {
   const handleKakaoLogin = () => {
     const kakaoAuthUrl = `https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=${process.env.NEXT_PUBLIC_KAKAO_REST_API_KEY}&redirect_uri=${process.env.NEXT_PUBLIC_KAKAO_REDIRECT_URI}`;
     window.location.href = kakaoAuthUrl;
+  };
+
+  const handleKakaoAuthCallback = async (code) => {
+    try {
+      const response = await axios.post(
+        `${process.env.BACKEND_HOSTNAME}/auth/kakao/callback`,
+        { code }
+      );
+      console.log("Kakao login successful", response);
+      // Handle successful login here
+    } catch (error) {
+      if (error.response && error.response.status === 404) {
+        const email = error.response.data.email;
+        router.push(`/signup?email=${email}`);
+      } else {
+        console.error("카카오 로그인 실패", error);
+      }
+    }
   };
 
   const handleGoogleLogin = () => {

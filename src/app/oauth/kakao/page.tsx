@@ -75,11 +75,12 @@ const KakaoRedirect = () => {
         router.push("/");
       } catch (error) {
         console.error("로그인 실패", error);
+        const email = error.response?.data?.email; // Ensure email is extracted
         if (window.innerWidth <= 768) {
           MySwal.fire({
             icon: "error",
             title: "로그인 실패",
-            text: "이메일 또는 비밀번호가 잘못되었습니다.",
+            text: "회원가입이 필요합니다!",
             toast: true,
             position: "top-end",
             showConfirmButton: false,
@@ -94,7 +95,7 @@ const KakaoRedirect = () => {
           MySwal.fire({
             icon: "error",
             title: "로그인 실패",
-            text: "이메일 또는 비밀번호가 잘못되었습니다.",
+            text: "회원가입이 필요합니다!",
             confirmButtonText: "확인",
             confirmButtonColor: "#FF812E",
             customClass: {
@@ -104,7 +105,7 @@ const KakaoRedirect = () => {
             },
           });
         }
-        router.push("/signin");
+        router.push(`/signup?email=${email}`); // Pass email to signup
       }
     };
 
