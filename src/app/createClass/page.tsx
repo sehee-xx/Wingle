@@ -5,6 +5,9 @@ import Header from "../../components/Header";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import Swal from "sweetalert2";
+import withReactContent from "sweetalert2-react-content";
+
+const MySwal = withReactContent(Swal);
 
 const CreateClass = () => {
   const router = useRouter();
@@ -80,10 +83,35 @@ const CreateClass = () => {
           Authorization: `Bearer ${token}`,
         },
       });
-      Swal.fire({
-        icon: "success",
-        title: "클래스가 등록되었습니다!",
-      });
+      if (window.innerWidth <= 768) {
+        MySwal.fire({
+          icon: "success",
+          title: "등록 성공 ",
+          text: "클래스가 정상적으로 등록되었습니다!",
+          toast: true,
+          position: "top-end",
+          showConfirmButton: false,
+          timer: 1000,
+          customClass: {
+            popup: "swal-custom-popup",
+            title: "swal-custom-title",
+            htmlContainer: "swal-custom-html-container",
+          },
+        });
+      } else {
+        MySwal.fire({
+          icon: "success",
+          title: "등록 성공 ",
+          text: "클래스가 정상적으로 등록되었습니다!",
+          confirmButtonText: "확인",
+          confirmButtonColor: "#FF812E",
+          customClass: {
+            popup: "swal-custom-popup",
+            title: "swal-custom-title",
+            htmlContainer: "swal-custom-html-container",
+          },
+        });
+      }
       router.push("/expertMypage");
     } catch (error) {
       console.error("Failed to create class:", error, error.message);

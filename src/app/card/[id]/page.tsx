@@ -9,6 +9,7 @@ import { useState, useEffect } from "react";
 import { useParams } from "next/navigation";
 import axios from "axios";
 import Swal from "sweetalert2";
+import withReactContent from "sweetalert2-react-content";
 
 const containerStyle = {
   width: "100%",
@@ -41,6 +42,8 @@ interface CardProps {
   createdAt: string;
   isApplied: boolean; // 신청 상태를 포함합니다.
 }
+
+const MySwal = withReactContent(Swal);
 
 const CardDetail = () => {
   const { id } = useParams() as { id: string };
@@ -117,7 +120,35 @@ const CardDetail = () => {
         setCard((prevCard) =>
           prevCard ? { ...prevCard, isApplied: true } : prevCard
         );
-        Swal.fire("신청 완료", "수업 신청이 완료되었습니다.", "success");
+        if (window.innerWidth <= 768) {
+          MySwal.fire({
+            icon: "success",
+            title: "신청 완료",
+            text: "클래스가 성공적으로 신청되었습니다.",
+            toast: true,
+            position: "top-end",
+            showConfirmButton: false,
+            timer: 1000,
+            customClass: {
+              popup: "swal-custom-popup",
+              title: "swal-custom-title",
+              htmlContainer: "swal-custom-html-container",
+            },
+          });
+        } else {
+          MySwal.fire({
+            icon: "success",
+            title: "신청 완료",
+            text: "클래스가 성공적으로 신청되었습니다.",
+            confirmButtonText: "확인",
+            confirmButtonColor: "#FF812E",
+            customClass: {
+              popup: "swal-custom-popup",
+              title: "swal-custom-title",
+              htmlContainer: "swal-custom-html-container",
+            },
+          });
+        }
       }
     } catch (error) {
       if (error.response && error.response.status === 400) {
@@ -153,7 +184,35 @@ const CardDetail = () => {
         setCard((prevCard) =>
           prevCard ? { ...prevCard, isApplied: false } : prevCard
         );
-        Swal.fire("취소 완료", "수업 신청이 취소되었습니다.", "success");
+        if (window.innerWidth <= 768) {
+          MySwal.fire({
+            icon: "success",
+            title: "취소 완료",
+            text: "클래스가 성공적으로 취소되었습니다.",
+            toast: true,
+            position: "top-end",
+            showConfirmButton: false,
+            timer: 1000,
+            customClass: {
+              popup: "swal-custom-popup",
+              title: "swal-custom-title",
+              htmlContainer: "swal-custom-html-container",
+            },
+          });
+        } else {
+          MySwal.fire({
+            icon: "success",
+            title: "취소 완료",
+            text: "클래스가 성공적으로 취소되었습니다.",
+            confirmButtonText: "확인",
+            confirmButtonColor: "#FF812E",
+            customClass: {
+              popup: "swal-custom-popup",
+              title: "swal-custom-title",
+              htmlContainer: "swal-custom-html-container",
+            },
+          });
+        }
       }
     } catch (error) {
       Swal.fire("취소 실패", "알 수 없는 오류가 발생했습니다.", "error");
