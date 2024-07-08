@@ -71,7 +71,7 @@ const Header = () => {
           },
         });
       }
-      router.push("/");
+      router.push("/signin");
     } else {
       router.push("/signup");
     }
@@ -82,8 +82,11 @@ const Header = () => {
   };
 
   const handleProfileClick = () => {
-    // expert, student 구분해서 routing
-    router.push("/expertMypage");
+    if (userType === "expert") {
+      router.push("/expertMypage");
+    } else {
+      router.push("/studentMypage");
+    }
   };
 
   return (
