@@ -1,14 +1,98 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import Header from "../../components/Header";
+import axios from "axios";
 import { useRouter } from "next/navigation";
+import Swal from "sweetalert2";
 
 const CreateClass = () => {
   const router = useRouter();
+  const [formData, setFormData] = useState({
+    title: "",
+    description: "",
+    phone: "",
+    category: "",
+    date: "",
+    location: "",
+    price: "",
+    participants: "",
+    content: "",
+  });
+  const [thumbnail, setThumbnail] = useState<File | null>(null);
+  const [additionalImages, setAdditionalImages] = useState<FileList | null>(
+    null
+  );
 
-  const handleRegistClick = () => {
-    router.push("/card");
+  const handleInputChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    const { name, value } = e.target;
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      [name]: value,
+    }));
+  };
+
+  const handleThumbnailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files.length > 0) {
+      setThumbnail(e.target.files[0]);
+    }
+  };
+
+  const handleAdditionalImagesChange = (
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    if (e.target.files && e.target.files.length > 0) {
+      setAdditionalImages(e.target.files);
+    }
+  };
+
+  const handleRegistClick = async () => {
+    const data = new FormData();
+    for (const key in formData) {
+      if (formData[key as keyof typeof formData]) {
+        data.append(key, formData[key as keyof typeof formData]);
+      }
+    }
+    if (thumbnail) {
+      data.append("image", thumbnail);
+    }
+    if (additionalImages) {
+      for (let i = 0; i < additionalImages.length; i++) {
+        data.append("files", additionalImages[i]);
+      }
+    }
+
+    const token = localStorage.getItem("token");
+
+    console.log("data", data);
+
+    data.forEach((value, key) => {
+      console.log(`!!!!!${key}: ${value}`);
+    });
+
+    console.log(`${process.env.BACKEND_HOSTNAME}`);
+
+    try {
+      await axios.post(`${process.env.BACKEND_HOSTNAME}/courses`, data, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      Swal.fire({
+        icon: "success",
+        title: "클래스가 등록되었습니다!",
+      });
+      // router.push("/card");
+    } catch (error) {
+      console.error("Failed to create class:", error, error.message);
+      Swal.fire({
+        icon: "error",
+        title: "Failed to create class",
+        text: error.response ? error.response.data.message : error.message,
+      });
+    }
   };
 
   return (
@@ -19,35 +103,101 @@ const CreateClass = () => {
           <Title>원데이 클래스 만들기</Title>
           <InfoGroup>
             <SubLabel>수업 이름</SubLabel>
-            <InfoInput placeholder="수업 이름을 입력해주세요" />
+            <InfoInput
+              name="title"
+              placeholder="수업 이름을 입력해주세요"
+              value={formData.title}
+              onChange={handleInputChange}
+            />
+          </InfoGroup>
+          <InfoGroup>
+            <SubLabel>날짜</SubLabel>
+            <InfoInput
+              name="date"
+              placeholder="날짜를 입력해주세요"
+              value={formData.date}
+              onChange={handleInputChange}
+            />
+          </InfoGroup>
+          <InfoGroup>
+            <SubLabel>카테고리</SubLabel>
+            <InfoInput
+              name="category"
+              placeholder="카테고리를 입력해주세요"
+              value={formData.category}
+              onChange={handleInputChange}
+            />
+          </InfoGroup>
+          <InfoGroup>
+            <SubLabel>한줄 설명을 입력해주세요</SubLabel>
+            <InfoInput
+              name="description"
+              placeholder="한줄 설명을 입력해주세요"
+              value={formData.description}
+              onChange={handleInputChange}
+            />
           </InfoGroup>
           <InfoGroup>
             <SubLabel>인원</SubLabel>
-            <InfoInput placeholder="인원을 입력해주세요" />
+            <InfoInput
+              name="participants"
+              placeholder="인원을 입력해주세요"
+              value={formData.participants}
+              onChange={handleInputChange}
+            />
           </InfoGroup>
           <InfoGroup>
             <SubLabel>가격</SubLabel>
-            <InfoInput placeholder="가격을 입력해주세요" />
+            <InfoInput
+              name="price"
+              placeholder="가격을 입력해주세요"
+              value={formData.price}
+              onChange={handleInputChange}
+            />
           </InfoGroup>
           <InfoGroup>
             <SubLabel>전화번호</SubLabel>
-            <InfoInput placeholder="전화번호를 입력해주세요" />
+            <InfoInput
+              name="phone"
+              placeholder="전화번호를 입력해주세요"
+              value={formData.phone}
+              onChange={handleInputChange}
+            />
           </InfoGroup>
           <InfoGroup>
-            <SubLabel>전문가 이름</SubLabel>
-            <InfoInput placeholder="이름을 입력해주세요" />
+            <SubLabel>장소</SubLabel>
+            <InfoInput
+              name="location"
+              placeholder="장소를 입력해주세요"
+              value={formData.location}
+              onChange={handleInputChange}
+            />
           </InfoGroup>
           <InfoGroup>
             <SubLabel>클래스 설명</SubLabel>
-            <InfoTextarea placeholder="클래스에 대해 설명해주세요" />
+            <InfoTextarea
+              name="content"
+              placeholder="클래스에 대해 설명해주세요"
+              value={formData.content}
+              onChange={handleInputChange}
+            />
           </InfoGroup>
           <InfoGroup>
             <SubLabel>썸네일 첨부</SubLabel>
-            <ImageUploadInput type="file" accept="image/*" />
+            <ImageUploadInput
+              type="file"
+              accept="image/*"
+              onChange={handleThumbnailChange}
+            />
           </InfoGroup>
           <InfoGroup>
             <SubLabel>추가 이미지 첨부</SubLabel>
-            <MultipleImagesUploadInput type="file" accept="image/*" multiple />
+            <MultipleImagesUploadInput
+              type="file"
+              accept="image/*"
+              multiple
+              onChange={handleAdditionalImagesChange}
+            />
           </InfoGroup>
           <SubmitButton onClick={handleRegistClick}>등록하기</SubmitButton>
         </FormWrapper>
