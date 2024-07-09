@@ -58,15 +58,22 @@ const ExpertMypage = () => {
 
   const fetchData = async () => {
     try {
-      const res = await axios.get(
-        `${process.env.BACKEND_HOSTNAME}/courses/mypage?sort_by_field=${sortByField}&sort_by_direction=${sortByDirection}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      setCourses(res.data.courses || []);
+      const res = await axios.get(`${process.env.BACKEND_HOSTNAME}/courses`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      let sortedCourses = res.data.trending || [];
+      if (sortByField === "created_at") {
+        sortedCourses =
+          sortByDirection === "desc"
+            ? res.data.trending
+            : res.data.trending.slice().reverse();
+      } else if (sortByField === "popularity") {
+        sortedCourses = res.data.choices;
+      }
+      setCourses(sortedCourses);
     } catch (error) {
       console.error("Error fetching mypage:", error);
     }
@@ -77,6 +84,11 @@ const ExpertMypage = () => {
       fetchData();
     }
   }, [token, sortByField, sortByDirection]);
+
+  useEffect(() => {
+    console.log(`sortByField: ${sortByField}`);
+    console.log(`sortByDirection: ${sortByDirection}`);
+  }, [sortByField, sortByDirection]);
 
   const handleDeletePost = async (postId: number) => {
     try {
@@ -125,6 +137,16 @@ const ExpertMypage = () => {
     router.push(`/editClass/${id}`);
   };
 
+  const handleSortChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const value = e.target.value;
+    const index = value.lastIndexOf("_");
+    const field = value.substring(0, index);
+    const direction = value.substring(index + 1);
+    setSortByField(field);
+    setSortByDirection(direction);
+    console.log(field, direction);
+  };
+
   return (
     <>
       <Header />
@@ -135,36 +157,18 @@ const ExpertMypage = () => {
               <Name>{displayName}</Name>
               <NameOthers>님 안녕하세요!</NameOthers>
             </div>
-            {/* {courses.length > 0 && (
-              <CreateClassButtonInNameBox onClick={handleCreateClick}>
-                클래스 등록하기
-              </CreateClassButtonInNameBox>
-            )} */}
             <DropdownWrapper>
               <Dropdown
                 value={`${sortByField}_${sortByDirection}`}
-                onChange={(e) => {
-                  const [field, direction] = e.target.value.split("_");
-                  if (courses) {
-                    setSortByField(
-                      field === "popularity" ? "popularity" : `${field}_at`
-                    );
-                    setSortByDirection(
-                      e.target.value.substring(10).replace("_", "")
-                    );
-                    if (e.target.value.startsWith("popularity")) {
-                      setSortByDirection("desc");
-                    }
-                  }
-                }}
+                onChange={handleSortChange}
               >
-                <option value="created_at_desc">최신 순</option>
-                <option value="created_at_asc">오래된 순</option>
+                <option value="created_at_asc">최신 순</option>
+                <option value="created_at_desc">오래된 순</option>
                 <option value="popularity_desc">찜 많은 순</option>
               </Dropdown>
             </DropdownWrapper>
           </NameBox>
-          {courses.length ? (
+          {courses?.length ? (
             courses.map((course) => (
               <PostCard
                 key={course.id}
@@ -222,7 +226,7 @@ const ExpertMypage = () => {
             <SidebarItem
               onClick={() => {
                 setSortByField("created_at");
-                setSortByDirection("desc");
+                setSortByDirection("asc");
               }}
             >
               최신 순으로 보기
@@ -230,7 +234,7 @@ const ExpertMypage = () => {
             <SidebarItem
               onClick={() => {
                 setSortByField("created_at");
-                setSortByDirection("asc");
+                setSortByDirection("desc");
               }}
             >
               오래된 순으로 보기
