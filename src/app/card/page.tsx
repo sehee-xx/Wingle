@@ -103,8 +103,12 @@ const CardList = () => {
 
     const isLiked = card.isFavorite;
 
+    console.log("Before toggle: ", card.id, isLiked);
+
     // UI를 먼저 업데이트하여 즉시 반영
     updateCardFavoriteStatus(card.id, !isLiked);
+
+    console.log("After toggle: ", card.id, !isLiked);
 
     try {
       if (isLiked) {
@@ -165,6 +169,8 @@ const CardList = () => {
     card.title.includes(searchQuery)
   );
 
+  console.log(userType);
+
   return (
     <PageWrapper>
       <Header />
@@ -201,12 +207,8 @@ const CardList = () => {
         <CardContainer>
           {filteredCards.map((card) => (
             <Card key={card.id} onClick={() => handleCardClick(card.id)}>
-              <CardImg src={card.image} />
-              <CardContent>
-                <CardTitle>{card.title}</CardTitle>
-                <CardDescription>{card.description}</CardDescription>
-                <CardPrice>{card.price}</CardPrice>
-                {userType === "student" && (
+              {userType === "student" && (
+                <LikeIconWrapper>
                   <LikeIcon
                     src={
                       card.isFavorite
@@ -219,7 +221,13 @@ const CardList = () => {
                       toggleLike(card);
                     }}
                   />
-                )}
+                </LikeIconWrapper>
+              )}
+              <CardImg src={card.image} />
+              <CardContent>
+                <CardTitle>{card.title}</CardTitle>
+                <CardDescription>{card.description}</CardDescription>
+                <CardPrice>{card.price}</CardPrice>
               </CardContent>
             </Card>
           ))}
@@ -313,9 +321,9 @@ const MobileSortFilterWrapper = styled.div`
   @media (max-width: 480px) {
     width: 80px;
     display: flex;
-    position: absolute; /* position: absolute 추가 */
-    right: 25px; /* 화면 오른쪽에 배치 */
-    top: 30px; /* 필요에 따라 조정 */
+    position: absolute;
+    right: 25px;
+    top: 30px;
   }
 `;
 
@@ -374,6 +382,8 @@ const Card = styled.div`
   border-radius: 10px;
   overflow: hidden;
   transition: transform 0.2s;
+  position: relative;
+
   &:hover {
     transform: scale(1.05);
   }
@@ -429,10 +439,13 @@ const CardPrice = styled.div`
   }
 `;
 
-const LikeIcon = styled.img`
+const LikeIconWrapper = styled.div`
   position: absolute;
   top: 10px;
   right: 10px;
+`;
+
+const LikeIcon = styled.img`
   width: 30px;
   height: 30px;
   cursor: pointer;
