@@ -436,14 +436,13 @@ const SubmitButton = styled.button`
 `;
 
 const ThumbnailPreview = styled.div`
-  margin-top: 10px;
-
   img {
     width: 200px;
     height: 200px;
     object-fit: cover;
     border-radius: 8px;
     border: 1px solid #e1e1e3;
+    margin-bottom: 20px;
   }
 `;
 
@@ -451,7 +450,6 @@ const AdditionalImagesPreview = styled.div`
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
-  margin-top: 10px;
 
   img {
     width: 100px;
@@ -459,5 +457,6 @@ const AdditionalImagesPreview = styled.div`
     object-fit: cover;
     border-radius: 8px;
     border: 1px solid #e1e1e3;
+    margin-bottom: 30px;
   }
 `;
