@@ -20,10 +20,12 @@ interface Course {
   phone: string;
   description: string;
   image: string;
+  images: string[];
   price: string;
   content: string;
   numWishes: number;
   createdAt: string;
+  isFavorite: boolean;
 }
 
 const MySwal = withReactContent(Swal);
@@ -37,7 +39,6 @@ const ExpertMypage = () => {
   const [courses, setCourses] = useState<Course[]>([]);
   const [sortByField, setSortByField] = useState<string>("created_at");
   const [sortByDirection, setSortByDirection] = useState<string>("desc");
-  // const [isMounted, setIsMounted] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
@@ -78,11 +79,21 @@ const ExpertMypage = () => {
 
   const handleDeletePost = async (postId: number) => {
     try {
-      await axios.delete(`${process.env.BACKEND_HOSTNAME}/courses/${postId}`, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
+      const token = localStorage.getItem("token");
+      const url = `${process.env.BACKEND_HOSTNAME}/courses/${postId}`;
+      const headers = {
+        Authorization: `Bearer ${token}`,
+      };
+
+      console.log("Request URL:", url);
+      console.log("Request Headers:", headers);
+
+      const response = await axios.delete(url, {
+        headers,
       });
+
+      console.log("Delete response:", response);
+
       if (window.innerWidth <= 768) {
         MySwal.fire({
           icon: "success",
@@ -115,6 +126,7 @@ const ExpertMypage = () => {
       const updatedCourses = courses.filter((course) => course.id !== postId);
       setCourses(updatedCourses);
     } catch (error) {
+      console.error("Delete error:", error);
       Swal.fire({
         icon: "error",
         title: "게시물 삭제 실패",
@@ -127,6 +139,10 @@ const ExpertMypage = () => {
     router.push("/createClass");
   };
 
+  const handleEditClick = (id: number) => {
+    router.push(`/editClass/${id}`);
+  };
+
   return (
     <>
       <Header />
@@ -137,22 +153,26 @@ const ExpertMypage = () => {
               <Name>{displayName}</Name>
               <NameOthers>님 안녕하세요!</NameOthers>
             </div>
-            <CreateClassButtonInNameBox onClick={handleCreateClick}>
-              클래스 등록하기
-            </CreateClassButtonInNameBox>
+            {courses.length > 0 && (
+              <CreateClassButtonInNameBox onClick={handleCreateClick}>
+                클래스 등록하기
+              </CreateClassButtonInNameBox>
+            )}
             <DropdownWrapper>
               <Dropdown
                 value={`${sortByField}_${sortByDirection}`}
                 onChange={(e) => {
                   const [field, direction] = e.target.value.split("_");
-                  setSortByField(
-                    field === "popularity" ? "popularity" : `${field}_at`
-                  );
-                  setSortByDirection(
-                    e.target.value.substring(10).replace("_", "")
-                  );
-                  if (e.target.value.startsWith("popularity")) {
-                    setSortByDirection("desc");
+                  if (courses) {
+                    setSortByField(
+                      field === "popularity" ? "popularity" : `${field}_at`
+                    );
+                    setSortByDirection(
+                      e.target.value.substring(10).replace("_", "")
+                    );
+                    if (e.target.value.startsWith("popularity")) {
+                      setSortByDirection("desc");
+                    }
                   }
                 }}
               >
@@ -162,14 +182,34 @@ const ExpertMypage = () => {
               </Dropdown>
             </DropdownWrapper>
           </NameBox>
-          {courses.length > 0 ? (
+          {courses.length ? (
             courses.map((course) => (
-              <PostCard key={course.id}>
+              <PostCard
+                key={course.id}
+                onClick={() => router.push(`/card/${course.id}`)}
+              >
                 <IconWrapper>
-                  <EditIcon />
-                  <DeleteIcon onClick={() => handleDeletePost(course.id)} />
+                  <EditIcon
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleEditClick(course.id);
+                    }}
+                  />
+                  <DeleteIcon
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleDeletePost(course.id);
+                    }}
+                  />
                 </IconWrapper>
-                <PostCardImg src={course.image} alt={course.title} />
+                <PostCardImg
+                  src={
+                    course.images && course.images.length > 0
+                      ? course.images[0]
+                      : "/path/to/default/image.jpg"
+                  }
+                  alt={course.title}
+                />
                 <PostInfo>
                   <PostName>{course.title}</PostName>
                   <PostSubData>{course.date}</PostSubData>

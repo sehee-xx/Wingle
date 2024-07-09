@@ -223,7 +223,7 @@ const CardList = () => {
                   />
                 </LikeIconWrapper>
               )}
-              <CardImg src={card.image} />
+              <CardImg src={card.images[0]} />
               <CardContent>
                 <CardTitle>{card.title}</CardTitle>
                 <CardDescription>{card.description}</CardDescription>

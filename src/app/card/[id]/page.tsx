@@ -35,7 +35,7 @@ interface CardProps {
   currentParticipants: number;
   phone: string;
   description: string;
-  image: string;
+  images: string[];
   price: string;
   content: string;
   numWishes: number;
@@ -48,12 +48,7 @@ const MySwal = withReactContent(Swal);
 const CardDetail = () => {
   const { id } = useParams() as { id: string };
   const baseId = parseInt(id);
-  const maxId = 24; // 예제에서 최대 카드 수를 24로 설정
-  const imageIds = [
-    getImageId(baseId, 0, maxId),
-    getImageId(baseId, 1, maxId),
-    getImageId(baseId, 2, maxId),
-  ];
+  // const maxId = 24; // 예제에서 최대 카드 수를 24로 설정
 
   const [card, setCard] = useState<CardProps | null>(null);
   const [selectedMarker, setSelectedMarker] = useState<{
@@ -87,7 +82,6 @@ const CardDetail = () => {
           `${process.env.BACKEND_HOSTNAME}/courses/${id}`
         );
         setCard(res.data);
-        // setIsApplied(res.data.isApplied); // card 데이터에 신청 상태 포함된 경우 설정
       } catch (error) {
         console.error("Error fetching card data:", error);
       }
@@ -116,7 +110,6 @@ const CardDetail = () => {
         }
       );
       if (response.status === 200 || response.status === 201) {
-        // setIsApplied((prev) => !prev);
         setCard((prevCard) =>
           prevCard ? { ...prevCard, isApplied: true } : prevCard
         );
@@ -232,12 +225,8 @@ const CardDetail = () => {
         <TopInfoBox>
           <ImageCarousel>
             <Carousel showArrows={true} infiniteLoop={true} showThumbs={false}>
-              {imageIds.map((imgId) => (
-                <Image
-                  key={imgId}
-                  src={card.image}
-                  alt={`Class Image ${imgId}`}
-                />
+              {card.images.map((image, index) => (
+                <Image key={index} src={image} alt={`Class Image ${index}`} />
               ))}
             </Carousel>
           </ImageCarousel>

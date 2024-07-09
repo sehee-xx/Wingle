@@ -16,7 +16,7 @@ interface Card {
   currentParticipants: number;
   phone: string;
   description: string;
-  image: string;
+  images: string[];
   price: string;
   content: string;
   numWishes: number;
@@ -227,7 +227,7 @@ const CardList = () => {
     return cards?.map((card) => (
       <Card key={card.id}>
         <CardImg
-          src={card.image}
+          src={card.images[0]}
           alt={`Card ${card.id}`}
           onClick={() => handleCardClick(card.id)}
         />
