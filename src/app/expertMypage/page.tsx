@@ -3,11 +3,12 @@
 import React, { useEffect, useState } from "react";
 import Header from "../../components/Header";
 import styled from "styled-components";
-import { FaEdit, FaTrashAlt } from "react-icons/fa"; // 아이콘 추가
+import { FaEdit, FaTrashAlt } from "react-icons/fa";
 import Swal from "sweetalert2";
 import axios from "axios";
 import withReactContent from "sweetalert2-react-content";
 import { parseJwt } from "../../../utils/jwt";
+import { useRouter } from "next/navigation";
 
 interface Course {
   id: number;
@@ -36,6 +37,8 @@ const ExpertMypage = () => {
   const [courses, setCourses] = useState<Course[]>([]);
   const [sortByField, setSortByField] = useState<string>("created_at");
   const [sortByDirection, setSortByDirection] = useState<string>("desc");
+  // const [isMounted, setIsMounted] = useState(false);
+  const router = useRouter();
 
   useEffect(() => {
     const storedToken = localStorage.getItem("token");
@@ -109,7 +112,6 @@ const ExpertMypage = () => {
           },
         });
       }
-      // 삭제 후 목록 갱신
       const updatedCourses = courses.filter((course) => course.id !== postId);
       setCourses(updatedCourses);
     } catch (error) {
@@ -121,8 +123,9 @@ const ExpertMypage = () => {
     }
   };
 
-  console.log("sortByField", sortByField);
-  console.log("sortByDirection", sortByDirection);
+  const handleCreateClick = () => {
+    router.push("/createClass");
+  };
 
   return (
     <>
@@ -130,8 +133,13 @@ const ExpertMypage = () => {
       <ExpertMypageWrapper>
         <Content>
           <NameBox>
-            <Name>{displayName}</Name>
-            <NameOthers>님 안녕하세요!</NameOthers>
+            <div>
+              <Name>{displayName}</Name>
+              <NameOthers>님 안녕하세요!</NameOthers>
+            </div>
+            <CreateClassButtonInNameBox onClick={handleCreateClick}>
+              클래스 등록하기
+            </CreateClassButtonInNameBox>
             <DropdownWrapper>
               <Dropdown
                 value={`${sortByField}_${sortByDirection}`}
@@ -177,7 +185,13 @@ const ExpertMypage = () => {
               </PostCard>
             ))
           ) : (
-            <p>등록된 클래스가 없습니다.</p>
+            <NoClassContainer>
+              <NoClassImage src="/assets/expert.svg" alt="No Classes" />
+              <NoClassText>아직 등록된 클래스가 없습니다.</NoClassText>
+              <CreateClassButton onClick={handleCreateClick}>
+                클래스 등록하기
+              </CreateClassButton>
+            </NoClassContainer>
           )}
         </Content>
         <Sidebar>
@@ -258,10 +272,28 @@ const Sidebar = styled.div`
 `;
 
 const NameBox = styled.div`
+  width: 100%;
+  max-width: 800px;
   display: flex;
   flex-direction: row;
   align-items: center;
   width: 100%;
+  justify-content: space-between;
+`;
+
+const CreateClassButtonInNameBox = styled.button`
+  padding: 10px 20px;
+  font-size: 16px;
+  font-weight: bold;
+  color: #fff;
+  background-color: #ff812e;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  &:hover {
+    background-color: #e66f1e;
+  }
 `;
 
 const Name = styled.label`
@@ -444,5 +476,44 @@ const DeleteIcon = styled(FaTrashAlt)`
   cursor: pointer;
   &:hover {
     color: #ff812e;
+  }
+`;
+
+const NoClassContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-top: 50px;
+  gap: 10px;
+`;
+
+const NoClassImage = styled.img`
+  width: 150px;
+  height: 150px;
+  margin-bottom: 20px;
+  border-radius: 50%;
+`;
+
+const NoClassText = styled.label`
+  font-size: 20px;
+  font-weight: 600;
+  color: #303033;
+  margin-bottom: 20px;
+`;
+
+const CreateClassButton = styled.button`
+  padding: 10px 20px;
+  font-size: 16px;
+  font-weight: bold;
+  color: #fff;
+  background-color: #ff812e;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+
+  &:hover {
+    background-color: #e66f1e;
   }
 `;
