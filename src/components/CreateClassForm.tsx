@@ -130,12 +130,17 @@ const CreateClassForm: React.FC<CreateClassFormProps> = ({
             Authorization: `Bearer ${localStorage.getItem("token")}`,
           },
         });
+        Swal.fire({
+          icon: "success",
+          title: "등록 성공",
+          text: "클래스가 등록되었습니다.",
+        });
         router.push("/expertMypage");
       } catch (error) {
         console.error("Failed to create class:", error);
         Swal.fire({
           icon: "error",
-          title: "Failed to create class",
+          title: "등록 실패",
           text: error.response ? error.response.data.message : error.message,
         });
       }
@@ -146,12 +151,17 @@ const CreateClassForm: React.FC<CreateClassFormProps> = ({
             Authorization: `Bearer ${localStorage.getItem("token")}`,
           },
         });
+        Swal.fire({
+          icon: "success",
+          title: "수정 성공",
+          text: "클래스가 수정되었습니다.",
+        });
         router.push("/expertMypage");
       } catch (error) {
         console.error("Failed to update class:", error);
         Swal.fire({
           icon: "error",
-          title: "Failed to update class",
+          title: "수정 실패",
           text: error.response ? error.response.data.message : error.message,
         });
       }
