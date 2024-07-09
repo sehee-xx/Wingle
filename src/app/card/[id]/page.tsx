@@ -21,11 +21,6 @@ const center = {
   lng: 127.365,
 };
 
-const getImageId = (baseId, increment, maxId) => {
-  const id = (baseId + increment) % maxId;
-  return id === 0 ? maxId : id;
-};
-
 interface CardProps {
   id: number;
   title: string;
@@ -40,7 +35,7 @@ interface CardProps {
   content: string;
   numWishes: number;
   createdAt: string;
-  isApplied: boolean; // 신청 상태를 포함합니다.
+  isApplied: boolean;
 }
 
 const MySwal = withReactContent(Swal);
@@ -48,7 +43,6 @@ const MySwal = withReactContent(Swal);
 const CardDetail = () => {
   const { id } = useParams() as { id: string };
   const baseId = parseInt(id);
-  // const maxId = 24; // 예제에서 최대 카드 수를 24로 설정
 
   const [card, setCard] = useState<CardProps | null>(null);
   const [selectedMarker, setSelectedMarker] = useState<{
@@ -82,6 +76,7 @@ const CardDetail = () => {
           `${process.env.BACKEND_HOSTNAME}/courses/${id}`
         );
         setCard(res.data);
+        setIsApplied(res.data.isApplied); // 서버에서 isApplied 값을 받아 초기화
       } catch (error) {
         console.error("Error fetching card data:", error);
       }
@@ -113,6 +108,7 @@ const CardDetail = () => {
         setCard((prevCard) =>
           prevCard ? { ...prevCard, isApplied: true } : prevCard
         );
+        setIsApplied(true); // 신청 상태 업데이트
         if (window.innerWidth <= 768) {
           MySwal.fire({
             icon: "success",
@@ -144,6 +140,7 @@ const CardDetail = () => {
         }
       }
     } catch (error) {
+      console.error("Error during application:", error.response.data);
       if (error.response && error.response.status === 400) {
         Swal.fire("신청 실패", "수업 정원이 가득 찼습니다.", "error");
       } else if (error.response && error.response.status === 401) {
@@ -158,8 +155,6 @@ const CardDetail = () => {
         Swal.fire("신청 실패", "알 수 없는 오류가 발생했습니다.", "error");
       }
     }
-    setIsApplied((prev) => !prev);
-    console.log("handleApply", isApplied);
   };
 
   const handleCancel = async () => {
@@ -173,7 +168,7 @@ const CardDetail = () => {
         }
       );
       if (response.status === 200) {
-        setIsApplied(false);
+        setIsApplied(false); // 신청 상태 업데이트
         setCard((prevCard) =>
           prevCard ? { ...prevCard, isApplied: false } : prevCard
         );
@@ -208,13 +203,18 @@ const CardDetail = () => {
         }
       }
     } catch (error) {
+      console.error("Error during cancellation:", error.response.data);
       Swal.fire("취소 실패", "알 수 없는 오류가 발생했습니다.", "error");
     }
-    console.log("handleCancel", isApplied);
   };
 
   if (!card) {
-    return <LoadingMessage>Loading...</LoadingMessage>;
+    return (
+      <LoadingWrapper>
+        <LoadingImage src="/assets/wingle.png" alt="Loading" />
+        <LoadingText>Loading...</LoadingText>
+      </LoadingWrapper>
+    );
   }
   console.log("isApplied", isApplied);
 
@@ -514,4 +514,25 @@ const LoadingMessage = styled.div`
   font-size: 18px;
   font-weight: bold;
   color: #ff812e;
+`;
+
+const LoadingWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  background-color: #f7f8f9;
+`;
+
+const LoadingImage = styled.img`
+  width: 120px;
+  height: 120px;
+`;
+
+const LoadingText = styled.div`
+  margin-top: 20px;
+  font-size: 30px;
+  color: #ff812e;
+  font-weight: 600;
 `;
