@@ -201,7 +201,7 @@ const CardList = () => {
             )}
           </TopRight>
         </SortFilterWrapper>
-        <MobileSortFilterWrapper>
+        <MobileSortFilterWrapper userType={userType}>
           <MobileSortFilterSelect onChange={handleSelectChange}>
             <option value="최신순">최신 순</option>
             <option value="인기순">인기 순</option>
@@ -322,17 +322,18 @@ const SortFilterWrapper = styled.div`
   }
 `;
 
-const MobileSortFilterWrapper = styled.div`
+const MobileSortFilterWrapper = styled.div<{ userType: string }>`
   display: none;
   margin-bottom: 20px;
 
   @media (max-width: 480px) {
-    width: 150px; /* 조정된 너비 */
+    width: 150px;
     display: flex;
     position: absolute;
-    right: 25px;
+    right: ${({ userType }) => (userType === "student" ? "0" : "25px")};
     top: 30px;
-    justify-content: space-between; /* 추가된 속성 */
+    justify-content: right;
+    margin-right: 25px;
   }
 `;
 
