@@ -182,20 +182,24 @@ const CardList = () => {
           onChange={handleSearchChange}
         />
         <SortFilterWrapper>
-          <SortFilterButton onClick={() => handleSortChange("최신순")}>
-            최신순
-          </SortFilterButton>
-          <SortFilterButton onClick={() => handleSortChange("인기순")}>
-            인기순
-          </SortFilterButton>
-          <SortFilterButton onClick={() => handleSortChange("가격순")}>
-            가격순
-          </SortFilterButton>
-          {userType === "expert" && (
-            <CreateClass onClick={handleCreateClick}>
-              클래스 등록하기
-            </CreateClass>
-          )}
+          <TopRight>
+            <Filter>
+              <SortFilterButton onClick={() => handleSortChange("최신순")}>
+                최신순
+              </SortFilterButton>
+              <SortFilterButton onClick={() => handleSortChange("인기순")}>
+                인기순
+              </SortFilterButton>
+              <SortFilterButton onClick={() => handleSortChange("가격순")}>
+                가격순
+              </SortFilterButton>
+            </Filter>
+            {userType === "expert" && (
+              <CreateClass onClick={handleCreateClick}>
+                클래스 등록하기
+              </CreateClass>
+            )}
+          </TopRight>
         </SortFilterWrapper>
         <MobileSortFilterWrapper>
           <MobileSortFilterSelect onChange={handleSelectChange}>
@@ -203,6 +207,9 @@ const CardList = () => {
             <option value="인기순">인기순</option>
             <option value="가격순">가격순</option>
           </MobileSortFilterSelect>
+          {userType === "expert" && (
+            <CreateClass onClick={handleCreateClick}>등록</CreateClass>
+          )}
         </MobileSortFilterWrapper>
         <CardContainer>
           {filteredCards.map((card) => (
@@ -307,6 +314,7 @@ const SortFilterWrapper = styled.div`
   display: flex;
   gap: 10px;
   margin-bottom: 20px;
+  width: 100%;
 
   @media (max-width: 480px) {
     margin-bottom: 15px;
@@ -319,11 +327,12 @@ const MobileSortFilterWrapper = styled.div`
   margin-bottom: 20px;
 
   @media (max-width: 480px) {
-    width: 80px;
+    width: 150px; /* 조정된 너비 */
     display: flex;
     position: absolute;
     right: 25px;
     top: 30px;
+    justify-content: space-between; /* 추가된 속성 */
   }
 `;
 
@@ -343,10 +352,13 @@ const MobileSortFilterSelect = styled.select`
   @media (max-width: 480px) {
     padding: 8px;
     font-size: 12px;
+    width: fit-content;
+    height: 40px;
   }
 `;
 
 const SortFilterButton = styled.button`
+  width: fit-content;
   padding: 10px 20px;
   border: 1px solid #ddd;
   border-radius: 10px;
@@ -456,8 +468,8 @@ const CreateClass = styled.div`
   flex-direction: row;
   align-items: center;
   justify-content: center;
-  width: 150px;
-  height: 40px;
+  width: 180px;
+  height: 45px;
   font-size: 16px;
   font-weight: 700;
   background-color: #ff812e;
@@ -465,14 +477,35 @@ const CreateClass = styled.div`
   border-radius: 10px;
   cursor: pointer;
   transition: background-color 0.3s;
-  margin-left: auto;
+  margin-left: 10px;
 
   &:hover {
     background-color: #e66f1e;
   }
 
   @media (max-width: 480px) {
-    width: 120px;
-    font-size: 14px;
+    width: 100px;
+    font-size: 12px;
+    height: 40px;
   }
+`;
+
+const TopRight = styled.div`
+  gap: 10px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 100%;
+
+  @media (max-width: 480px) {
+    justify-content: flex-start;
+  }
+`;
+
+const Filter = styled.div`
+  display: flex;
+  flex-direction: row;
+  width: fit-content;
+  height: 45px;
+  gap: 10px;
 `;
