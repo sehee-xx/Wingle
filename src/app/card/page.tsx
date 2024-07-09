@@ -57,10 +57,17 @@ const CardList = () => {
     let sortedCards = [...cards];
     switch (sortOption) {
       case "최신순":
-        sortedCards = sortedCards.sort(
-          (a, b) =>
-            new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
-        );
+        sortedCards = sortedCards.sort((a, b) => {
+          if (
+            !(new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+          ) {
+            return a.id - b.id;
+          } else {
+            return (
+              new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+            );
+          }
+        });
         break;
       case "인기순":
         sortedCards = sortedCards.sort((a, b) => b.numWishes - a.numWishes);
@@ -76,6 +83,11 @@ const CardList = () => {
         break;
     }
     setCards(sortedCards);
+  };
+
+  const handleSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const sortOption = e.target.value;
+    handleSortChange(sortOption);
   };
 
   const toggleLike = async (card: any) => {
@@ -179,6 +191,13 @@ const CardList = () => {
             </CreateClass>
           )}
         </SortFilterWrapper>
+        <MobileSortFilterWrapper>
+          <MobileSortFilterSelect onChange={handleSelectChange}>
+            <option value="최신순">최신순</option>
+            <option value="인기순">인기순</option>
+            <option value="가격순">가격순</option>
+          </MobileSortFilterSelect>
+        </MobileSortFilterWrapper>
         <CardContainer>
           {filteredCards.map((card) => (
             <Card key={card.id} onClick={() => handleCardClick(card.id)}>
@@ -230,6 +249,7 @@ const CardListWrapper = styled.div`
   display: flex;
   flex-direction: column;
   margin-bottom: 30px;
+  position: relative;
 
   @media (max-width: 1024px) {
     padding: 20px 30px;
@@ -282,6 +302,39 @@ const SortFilterWrapper = styled.div`
 
   @media (max-width: 480px) {
     margin-bottom: 15px;
+    display: none;
+  }
+`;
+
+const MobileSortFilterWrapper = styled.div`
+  display: none;
+  margin-bottom: 20px;
+
+  @media (max-width: 480px) {
+    width: 80px;
+    display: flex;
+    position: absolute; /* position: absolute 추가 */
+    right: 25px; /* 화면 오른쪽에 배치 */
+    top: 30px; /* 필요에 따라 조정 */
+  }
+`;
+
+const MobileSortFilterSelect = styled.select`
+  padding: 10px;
+  width: 100%;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  font-size: 14px;
+  background-color: white;
+  cursor: pointer;
+
+  &:hover {
+    background-color: #f0f0f0;
+  }
+
+  @media (max-width: 480px) {
+    padding: 8px;
+    font-size: 12px;
   }
 `;
 
