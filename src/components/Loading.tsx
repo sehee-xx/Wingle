@@ -14,6 +14,7 @@ const Loading = () => {
 export default Loading;
 
 const LoadingWrapper = styled.div`
+  width: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;

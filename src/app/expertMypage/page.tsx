@@ -9,6 +9,7 @@ import axios from "axios";
 import withReactContent from "sweetalert2-react-content";
 import { parseJwt } from "../../../utils/jwt";
 import { useRouter } from "next/navigation";
+import Loading from "../../components/Loading";
 
 interface Course {
   id: number;
@@ -39,6 +40,7 @@ const ExpertMypage = () => {
   const [courses, setCourses] = useState<Course[]>([]);
   const [sortByField, setSortByField] = useState<string>("created_at");
   const [sortByDirection, setSortByDirection] = useState<string>("desc");
+  const [isLoading, setIsLoading] = useState(true);
   const router = useRouter();
 
   useEffect(() => {
@@ -74,8 +76,10 @@ const ExpertMypage = () => {
         sortedCourses = res.data.choices;
       }
       setCourses(sortedCourses);
+      setIsLoading(false);
     } catch (error) {
       console.error("Error fetching mypage:", error);
+      setIsLoading(false);
     }
   };
 
@@ -146,6 +150,10 @@ const ExpertMypage = () => {
     setSortByDirection(direction);
     console.log(field, direction);
   };
+
+  if (isLoading) {
+    return <Loading />;
+  }
 
   return (
     <>

@@ -1,26 +1,45 @@
 "use client";
-import React from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import CardList from "../components/CardList";
 import Carousel from "../components/Carousel";
 import Header from "../components/Header";
+import Loading from "../components/Loading";
 
 // src/app/page.tsx
 const Home = () => {
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const loadContent = async () => {
+      // simulate content loading
+      await new Promise((resolve) => setTimeout(resolve, 2000));
+      setIsLoading(false);
+    };
+
+    loadContent();
+  }, []);
+
   return (
     <HomeWrapper>
-      <Header />
-      <RealBody>
-        <Body>
-          <CarouselWrapper>
-            <Carousel />
-          </CarouselWrapper>
-        </Body>
-        <Footer>
-          <CardList />
-        </Footer>
-      </RealBody>
-      <FooterBanner src="/assets/bottom_banner.png" />
+      {isLoading ? (
+        <Loading />
+      ) : (
+        <>
+          <Header />
+          <RealBody>
+            <Body>
+              <CarouselWrapper>
+                <Carousel />
+              </CarouselWrapper>
+            </Body>
+            <Footer>
+              <CardList />
+            </Footer>
+          </RealBody>
+          <FooterBanner src="/assets/bottom_banner.png" />
+        </>
+      )}
     </HomeWrapper>
   );
 };

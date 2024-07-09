@@ -10,6 +10,7 @@ import { useParams } from "next/navigation";
 import axios from "axios";
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
+import Loading from "../../../components/Loading";
 
 const containerStyle = {
   width: "100%",
@@ -42,7 +43,7 @@ const MySwal = withReactContent(Swal);
 
 const CardDetail = () => {
   const { id } = useParams() as { id: string };
-  const baseId = parseInt(id);
+  const [isLoading, setIsLoading] = useState(true);
 
   const [card, setCard] = useState<CardProps | null>(null);
   const [selectedMarker, setSelectedMarker] = useState<{
@@ -77,9 +78,11 @@ const CardDetail = () => {
           `${process.env.BACKEND_HOSTNAME}/courses/${id}`
         );
         setCard(res.data);
-        setIsApplied(res.data.isApplied); // 서버에서 isApplied 값을 받아 초기화
+        setIsApplied(res.data.isApplied);
+        setIsLoading(false);
       } catch (error) {
         console.error("Error fetching card data:", error);
+        setIsLoading(false);
       }
     };
 
@@ -145,6 +148,7 @@ const CardDetail = () => {
           });
         }
       }
+      setIsLoading(false);
     } catch (error) {
       console.error("Error during application:", error.response.data);
       if (error.response && error.response.status === 400) {
@@ -161,6 +165,7 @@ const CardDetail = () => {
         Swal.fire("신청 실패", "알 수 없는 오류가 발생했습니다.", "error");
       }
     }
+    setIsLoading(false);
   };
 
   const handleCancel = async () => {
@@ -208,10 +213,12 @@ const CardDetail = () => {
           });
         }
       }
+      setIsLoading(false);
     } catch (error) {
       console.error("Error during cancellation:", error.response.data);
       Swal.fire("취소 실패", "알 수 없는 오류가 발생했습니다.", "error");
     }
+    setIsLoading(false);
   };
 
   if (!card) {
@@ -226,76 +233,90 @@ const CardDetail = () => {
 
   return (
     <>
-      <Header />
-      <DetailWrapper>
-        <TopInfoBox>
-          <ImageCarousel>
-            <Carousel showArrows={true} infiniteLoop={true} showThumbs={false}>
-              {card.images.map((image, index) => (
-                <Image key={index} src={image} alt={`Class Image ${index}`} />
-              ))}
-            </Carousel>
-          </ImageCarousel>
-          <TopRightInfo>
-            <ClassName>{card.title}</ClassName>
-            <Instructor>{card.name}</Instructor>
-            <Date>{card.date}</Date>
-            <PurchaseSection>
-              <Price>{card.price}</Price>
-              <Participants>
-                한 타임 최대 인원: {card.participants}명
-              </Participants>
-              <Phone>{card.phone}</Phone>
-              {userType !== "expert" &&
-                (isApplied ? (
-                  <CancelButton onClick={handleApplicationToggle}>
-                    취소하기
-                  </CancelButton>
-                ) : (
-                  <ApplicationButton onClick={handleApplicationToggle}>
-                    신청하기
-                  </ApplicationButton>
-                ))}
-            </PurchaseSection>
-          </TopRightInfo>
-        </TopInfoBox>
-        <Description dangerouslySetInnerHTML={{ __html: card.content }} />
-        <MapSection>
-          {isMapLoaded ? (
-            <GoogleMap
-              mapContainerStyle={containerStyle}
-              center={center}
-              zoom={16}
-              options={{ disableDefaultUI: true, gestureHandling: "none" }}
-            >
-              <Marker
-                position={center}
-                onClick={() => setSelectedMarker(center)}
-              />
-              {selectedMarker && (
-                <InfoWindow
-                  position={selectedMarker}
-                  onCloseClick={() => setSelectedMarker(null)}
-                  onDomReady={() => {
-                    const iwCloseBtn = document.querySelector(
-                      ".gm-style-iw button"
-                    ) as HTMLElement;
-                    if (iwCloseBtn) {
-                      iwCloseBtn.style.width = "10px";
-                      iwCloseBtn.style.height = "10px";
-                      iwCloseBtn.style.fontWeight = "600";
-                    }
-                  }}
+      {isLoading ? (
+        <Loading />
+      ) : (
+        <>
+          <Header />
+          <DetailWrapper>
+            <TopInfoBox>
+              <ImageCarousel>
+                <Carousel
+                  showArrows={true}
+                  infiniteLoop={true}
+                  showThumbs={false}
                 >
-                  <MapText>KAIST</MapText>
-                </InfoWindow>
+                  {card.images.map((image, index) => (
+                    <Image
+                      key={index}
+                      src={image}
+                      alt={`Class Image ${index}`}
+                    />
+                  ))}
+                </Carousel>
+              </ImageCarousel>
+              <TopRightInfo>
+                <ClassName>{card.title}</ClassName>
+                <Instructor>{card.name}</Instructor>
+                <Date>{card.date}</Date>
+                <PurchaseSection>
+                  <Price>{card.price}</Price>
+                  <Participants>
+                    한 타임 최대 인원: {card.participants}명
+                  </Participants>
+                  <Phone>{card.phone}</Phone>
+                  {userType !== "expert" &&
+                    (isApplied ? (
+                      <CancelButton onClick={handleApplicationToggle}>
+                        취소하기
+                      </CancelButton>
+                    ) : (
+                      <ApplicationButton onClick={handleApplicationToggle}>
+                        신청하기
+                      </ApplicationButton>
+                    ))}
+                </PurchaseSection>
+              </TopRightInfo>
+            </TopInfoBox>
+            <Description dangerouslySetInnerHTML={{ __html: card.content }} />
+            <MapSection>
+              {isMapLoaded ? (
+                <GoogleMap
+                  mapContainerStyle={containerStyle}
+                  center={center}
+                  zoom={16}
+                  options={{ disableDefaultUI: true, gestureHandling: "none" }}
+                >
+                  <Marker
+                    position={center}
+                    onClick={() => setSelectedMarker(center)}
+                  />
+                  {selectedMarker && (
+                    <InfoWindow
+                      position={selectedMarker}
+                      onCloseClick={() => setSelectedMarker(null)}
+                      onDomReady={() => {
+                        const iwCloseBtn = document.querySelector(
+                          ".gm-style-iw button"
+                        ) as HTMLElement;
+                        if (iwCloseBtn) {
+                          iwCloseBtn.style.width = "10px";
+                          iwCloseBtn.style.height = "10px";
+                          iwCloseBtn.style.fontWeight = "600";
+                        }
+                      }}
+                    >
+                      <MapText>KAIST</MapText>
+                    </InfoWindow>
+                  )}
+                </GoogleMap>
+              ) : (
+                <LoadingMessage>Loading...</LoadingMessage>
               )}
-            </GoogleMap>
-          ) : (
-            <LoadingMessage>Loading...</LoadingMessage>
-          )}
-        </MapSection>
-      </DetailWrapper>
+            </MapSection>
+          </DetailWrapper>
+        </>
+      )}
     </>
   );
 };

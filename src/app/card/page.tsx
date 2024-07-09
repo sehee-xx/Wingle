@@ -6,6 +6,7 @@ import Header from "../../components/Header";
 import { useRouter } from "next/navigation";
 import axios from "axios";
 import Swal from "sweetalert2";
+import Loading from "../../components/Loading";
 
 interface Card {
   id: number;
@@ -31,6 +32,7 @@ const CardList = () => {
   const [userType, setUserType] = useState<string>("");
   const [cards, setCards] = useState<Card[]>([]);
   const [sortType, setSortType] = useState<string>("최신순");
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -44,9 +46,11 @@ const CardList = () => {
           }
         );
         const data = response.data;
-        setCards(data.trending); // 기본 정렬은 최신순(trending)
+        setCards(data.trending);
+        setIsLoading(false);
       } catch (error) {
         console.error("Error fetching data:", error);
+        setIsLoading(false);
       }
     };
 
@@ -219,73 +223,79 @@ const CardList = () => {
 
   return (
     <PageWrapper>
-      <Header />
-      <CardListWrapper>
-        <Title>원데이 클래스 전체보기</Title>
-        <SearchBar
-          placeholder="원하는 클래스를 마음껏 검색해보세요!"
-          value={searchQuery}
-          onChange={handleSearchChange}
-        />
-        <SortFilterWrapper>
-          <TopRight>
-            <Filter>
-              <SortFilterButton onClick={() => handleSortChange("최신순")}>
-                최신 순
-              </SortFilterButton>
-              <SortFilterButton onClick={() => handleSortChange("인기순")}>
-                인기 순
-              </SortFilterButton>
-              <SortFilterButton onClick={() => handleSortChange("가격순")}>
-                가격 순
-              </SortFilterButton>
-            </Filter>
-            {userType === "expert" && (
-              <CreateClass onClick={handleCreateClick}>
-                클래스 등록하기
-              </CreateClass>
-            )}
-          </TopRight>
-        </SortFilterWrapper>
-        <MobileSortFilterWrapper>
-          <MobileSortFilterSelect onChange={handleSelectChange}>
-            <option value="최신순">최신 순</option>
-            <option value="인기순">인기 순</option>
-            <option value="가격순">가격 순</option>
-          </MobileSortFilterSelect>
-          {userType === "expert" && (
-            <CreateClass onClick={handleCreateClick}>등록</CreateClass>
-          )}
-        </MobileSortFilterWrapper>
-        <CardContainer>
-          {filteredCards.map((card) => (
-            <Card key={card.id} onClick={() => handleCardClick(card.id)}>
-              {userType === "student" && (
-                <LikeIconWrapper>
-                  <LikeIcon
-                    src={
-                      card.isFavorite
-                        ? "/assets/fillHeart.png"
-                        : "/assets/emptyHeart.png"
-                    }
-                    alt="Like Icon"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      toggleLike(card);
-                    }}
-                  />
-                </LikeIconWrapper>
+      {isLoading ? (
+        <Loading />
+      ) : (
+        <>
+          <Header />
+          <CardListWrapper>
+            <Title>원데이 클래스 전체보기</Title>
+            <SearchBar
+              placeholder="원하는 클래스를 마음껏 검색해보세요!"
+              value={searchQuery}
+              onChange={handleSearchChange}
+            />
+            <SortFilterWrapper>
+              <TopRight>
+                <Filter>
+                  <SortFilterButton onClick={() => handleSortChange("최신순")}>
+                    최신 순
+                  </SortFilterButton>
+                  <SortFilterButton onClick={() => handleSortChange("인기순")}>
+                    인기 순
+                  </SortFilterButton>
+                  <SortFilterButton onClick={() => handleSortChange("가격순")}>
+                    가격 순
+                  </SortFilterButton>
+                </Filter>
+                {userType === "expert" && (
+                  <CreateClass onClick={handleCreateClick}>
+                    클래스 등록하기
+                  </CreateClass>
+                )}
+              </TopRight>
+            </SortFilterWrapper>
+            <MobileSortFilterWrapper>
+              <MobileSortFilterSelect onChange={handleSelectChange}>
+                <option value="최신순">최신 순</option>
+                <option value="인기순">인기 순</option>
+                <option value="가격순">가격 순</option>
+              </MobileSortFilterSelect>
+              {userType === "expert" && (
+                <CreateClass onClick={handleCreateClick}>등록</CreateClass>
               )}
-              <CardImg src={card.images[0]} />
-              <CardContent>
-                <CardTitle>{card.title}</CardTitle>
-                <CardDescription>{card.description}</CardDescription>
-                <CardPrice>{card.price}</CardPrice>
-              </CardContent>
-            </Card>
-          ))}
-        </CardContainer>
-      </CardListWrapper>
+            </MobileSortFilterWrapper>
+            <CardContainer>
+              {filteredCards.map((card) => (
+                <Card key={card.id} onClick={() => handleCardClick(card.id)}>
+                  {userType === "student" && (
+                    <LikeIconWrapper>
+                      <LikeIcon
+                        src={
+                          card.isFavorite
+                            ? "/assets/fillHeart.png"
+                            : "/assets/emptyHeart.png"
+                        }
+                        alt="Like Icon"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          toggleLike(card);
+                        }}
+                      />
+                    </LikeIconWrapper>
+                  )}
+                  <CardImg src={card.images[0]} />
+                  <CardContent>
+                    <CardTitle>{card.title}</CardTitle>
+                    <CardDescription>{card.description}</CardDescription>
+                    <CardPrice>{card.price}</CardPrice>
+                  </CardContent>
+                </Card>
+              ))}
+            </CardContainer>
+          </CardListWrapper>
+        </>
+      )}
     </PageWrapper>
   );
 };
