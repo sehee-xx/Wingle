@@ -201,7 +201,7 @@ const CardList = () => {
             )}
           </TopRight>
         </SortFilterWrapper>
-        <MobileSortFilterWrapper userType={userType}>
+        <MobileSortFilterWrapper>
           <MobileSortFilterSelect onChange={handleSelectChange}>
             <option value="최신순">최신 순</option>
             <option value="인기순">인기 순</option>
@@ -322,7 +322,7 @@ const SortFilterWrapper = styled.div`
   }
 `;
 
-const MobileSortFilterWrapper = styled.div<{ userType: string }>`
+const MobileSortFilterWrapper = styled.div`
   display: none;
   margin-bottom: 20px;
 
@@ -330,7 +330,7 @@ const MobileSortFilterWrapper = styled.div<{ userType: string }>`
     width: 150px;
     display: flex;
     position: absolute;
-    right: ${({ userType }) => (userType === "student" ? "0" : "25px")};
+    right: 0px;
     top: 30px;
     justify-content: right;
     margin-right: 25px;
