@@ -56,23 +56,24 @@ const ExpertMypage = () => {
     }
   }, []);
 
+  const fetchData = async () => {
+    try {
+      const res = await axios.get(
+        `${process.env.BACKEND_HOSTNAME}/courses/mypage?sort_by_field=${sortByField}&sort_by_direction=${sortByDirection}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      setCourses(res.data.courses || []);
+    } catch (error) {
+      console.error("Error fetching mypage:", error);
+    }
+  };
+
   useEffect(() => {
     if (token) {
-      const fetchData = async () => {
-        try {
-          const res = await axios.get(
-            `${process.env.BACKEND_HOSTNAME}/courses/mypage?sort_by_field=${sortByField}&sort_by_direction=${sortByDirection}`,
-            {
-              headers: {
-                Authorization: `Bearer ${token}`,
-              },
-            }
-          );
-          setCourses(res.data.courses || []);
-        } catch (error) {
-          console.error("Error fetching mypage:", error);
-        }
-      };
       fetchData();
     }
   }, [token, sortByField, sortByDirection]);
@@ -91,27 +92,8 @@ const ExpertMypage = () => {
       console.log("Delete response:", response);
 
       if (response.status === 200) {
-        // 상태 코드가 200인 경우에 상태를 업데이트
-        const updatedCourses = courses.filter((course) => course.id !== postId);
-        setCourses(updatedCourses);
-      }
+        await fetchData(); // 삭제 후 데이터 다시 불러옴
 
-      if (window.innerWidth <= 768) {
-        MySwal.fire({
-          icon: "success",
-          title: "게시물 삭제 성공",
-          text: "게시물이 성공적으로 삭제되었습니다.",
-          toast: true,
-          position: "top-end",
-          showConfirmButton: false,
-          timer: 1000,
-          customClass: {
-            popup: "swal-custom-popup",
-            title: "swal-custom-title",
-            htmlContainer: "swal-custom-html-container",
-          },
-        });
-      } else {
         MySwal.fire({
           icon: "success",
           title: "게시물 삭제 성공",
@@ -153,11 +135,11 @@ const ExpertMypage = () => {
               <Name>{displayName}</Name>
               <NameOthers>님 안녕하세요!</NameOthers>
             </div>
-            {courses.length > 0 && (
+            {/* {courses.length > 0 && (
               <CreateClassButtonInNameBox onClick={handleCreateClick}>
                 클래스 등록하기
               </CreateClassButtonInNameBox>
-            )}
+            )} */}
             <DropdownWrapper>
               <Dropdown
                 value={`${sortByField}_${sortByDirection}`}
@@ -319,10 +301,17 @@ const NameBox = styled.div`
   align-items: center;
   width: 100%;
   justify-content: space-between;
+
+  @media (max-width: 480px) {
+    flex-direction: column;
+    align-items: flex-start;
+  }
 `;
 
 const CreateClassButtonInNameBox = styled.button`
-  padding: 10px 20px;
+  width: fit-content;
+  height: 50px;
+  padding: 0px 20px;
   font-size: 16px;
   font-weight: bold;
   color: #fff;
@@ -333,6 +322,13 @@ const CreateClassButtonInNameBox = styled.button`
   transition: background-color 0.3s;
   &:hover {
     background-color: #e66f1e;
+  }
+
+  @media (max-width: 480px) {
+    height: 30px;
+    font-size: 12px;
+    padding: 0px 10px;
+    margin-bottom: 10px;
   }
 `;
 
@@ -481,7 +477,7 @@ const DropdownWrapper = styled.div`
   display: none;
 
   @media (max-width: 480px) {
-    display: block;
+    display: flex;
     margin-left: auto;
   }
 `;
