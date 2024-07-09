@@ -1,18 +1,16 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { useRouter, useParams } from "next/navigation";
+import { useParams } from "next/navigation";
 import axios from "axios";
 import Swal from "sweetalert2";
 import Header from "../../../components/Header";
 import CreateClassForm from "../../../components/CreateClassForm";
+import styled from "styled-components";
 
 const EditClassPage = () => {
-  const router = useRouter();
   const params = useParams();
   const id = params?.id as string;
   const [initialData, setInitialData] = useState(null);
-  const [thumbnail, setThumbnail] = useState<File | null>(null);
-  const [additionalImages, setAdditionalImages] = useState<File[]>([]);
 
   useEffect(() => {
     if (id) {
@@ -35,61 +33,41 @@ const EditClassPage = () => {
     }
   }, [id]);
 
-  const handleSuccess = () => {
-    router.push("/expertMypage");
-  };
-
-  const handleSubmit = async (formData) => {
-    const data = new FormData();
-    for (const key in formData) {
-      const value = formData[key as keyof typeof formData];
-      if (value !== undefined) {
-        data.append(key, value);
-      }
-    }
-
-    if (thumbnail) {
-      data.append("thumbnail", thumbnail);
-    }
-
-    additionalImages.forEach((image) => {
-      data.append(`additionalImages`, image);
-    });
-
-    const token = localStorage.getItem("token");
-
-    try {
-      // Axios 요청 설정
-      await axios.put(`${process.env.BACKEND_HOSTNAME}/courses/${id}`, data, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          // "Content-Type": "multipart/form-data", // 헤더를 설정하지 않으면 브라우저가 자동으로 설정합니다.
-        },
-      });
-      handleSuccess();
-    } catch (error) {
-      console.error("Failed to update class:", error);
-      Swal.fire({
-        icon: "error",
-        title: "Failed to update class",
-        text: error.response ? error.response.data.message : error.message,
-      });
-    }
-  };
-
-  if (!initialData) return <div>Loading...</div>;
+  if (!initialData)
+    return (
+      <LoadingWrapper>
+        <LoadingImage src="/assets/wingle.png" alt="Loading" />
+        <LoadingText>Loading...</LoadingText>
+      </LoadingWrapper>
+    );
 
   return (
     <>
       <Header />
-      {/* <CreateClassForm
-        initialData={initialData}
-        onSubmit={handleSubmit}
-        mode="edit"
-      /> */}
       <CreateClassForm initialData={initialData} mode="edit" />
     </>
   );
 };
 
 export default EditClassPage;
+
+const LoadingWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  background-color: #f7f8f9;
+`;
+
+const LoadingImage = styled.img`
+  width: 120px;
+  height: 120px;
+`;
+
+const LoadingText = styled.div`
+  margin-top: 20px;
+  font-size: 30px;
+  color: #ff812e;
+  font-weight: 600;
+`;
