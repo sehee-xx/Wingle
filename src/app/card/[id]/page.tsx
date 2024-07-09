@@ -251,9 +251,15 @@ const CardDetail = () => {
                 한 타임 최대 인원: {card.participants}명
               </Participants>
               <Phone>{card.phone}</Phone>
-              <ApplicationButton onClick={handleApplicationToggle}>
-                {isApplied ? "취소하기" : "신청하기"}
-              </ApplicationButton>
+              {isApplied ? (
+                <CancelButton onClick={handleApplicationToggle}>
+                  취소하기
+                </CancelButton>
+              ) : (
+                <ApplicationButton onClick={handleApplicationToggle}>
+                  신청하기
+                </ApplicationButton>
+              )}
             </PurchaseSection>
           </TopRightInfo>
         </TopInfoBox>
