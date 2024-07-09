@@ -108,8 +108,8 @@ const ExpertMypage = () => {
 
         MySwal.fire({
           icon: "success",
-          title: "게시물 삭제 성공",
-          text: "게시물이 성공적으로 삭제되었습니다.",
+          title: "삭제 성공",
+          text: "클래스가 삭제되었습니다.",
           confirmButtonText: "확인",
           confirmButtonColor: "#FF812E",
           customClass: {
