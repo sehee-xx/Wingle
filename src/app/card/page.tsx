@@ -56,7 +56,7 @@ const CardList = () => {
     setSortType(sortOption);
     let sortedCards = [...cards];
     switch (sortOption) {
-      case "최신순":
+      case "최신 순":
         sortedCards = sortedCards.sort((a, b) => {
           if (
             !(new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
@@ -69,10 +69,10 @@ const CardList = () => {
           }
         });
         break;
-      case "인기순":
+      case "인기 순":
         sortedCards = sortedCards.sort((a, b) => b.numWishes - a.numWishes);
         break;
-      case "가격순":
+      case "가격 순":
         sortedCards = sortedCards.sort(
           (a, b) =>
             parseFloat(a.price.replace("₩", "").replace(",", "")) -
@@ -185,13 +185,13 @@ const CardList = () => {
           <TopRight>
             <Filter>
               <SortFilterButton onClick={() => handleSortChange("최신순")}>
-                최신순
+                최신 순
               </SortFilterButton>
               <SortFilterButton onClick={() => handleSortChange("인기순")}>
-                인기순
+                인기 순
               </SortFilterButton>
               <SortFilterButton onClick={() => handleSortChange("가격순")}>
-                가격순
+                가격 순
               </SortFilterButton>
             </Filter>
             {userType === "expert" && (
@@ -203,9 +203,9 @@ const CardList = () => {
         </SortFilterWrapper>
         <MobileSortFilterWrapper>
           <MobileSortFilterSelect onChange={handleSelectChange}>
-            <option value="최신순">최신순</option>
-            <option value="인기순">인기순</option>
-            <option value="가격순">가격순</option>
+            <option value="최신순">최신 순</option>
+            <option value="인기순">인기 순</option>
+            <option value="가격순">가격 순</option>
           </MobileSortFilterSelect>
           {userType === "expert" && (
             <CreateClass onClick={handleCreateClick}>등록</CreateClass>
