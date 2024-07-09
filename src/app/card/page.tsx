@@ -7,11 +7,29 @@ import { useRouter } from "next/navigation";
 import axios from "axios";
 import Swal from "sweetalert2";
 
+interface Card {
+  id: number;
+  title: string;
+  name: string;
+  date: string;
+  participants: number;
+  currentParticipants: number;
+  phone: string;
+  description: string;
+  image: string;
+  images: string[];
+  price: string;
+  content: string;
+  numWishes: number;
+  createdAt: string;
+  isFavorite: boolean;
+}
+
 const CardList = () => {
   const router = useRouter();
   const [searchQuery, setSearchQuery] = useState("");
   const [userType, setUserType] = useState<string>("");
-  const [cards, setCards] = useState<any[]>([]);
+  const [cards, setCards] = useState<Card[]>([]);
   const [sortType, setSortType] = useState<string>("최신순");
 
   useEffect(() => {
@@ -26,7 +44,7 @@ const CardList = () => {
           }
         );
         const data = response.data;
-        setCards(data.trending);
+        setCards(data.trending); // 기본 정렬은 최신순(trending)
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -39,6 +57,55 @@ const CardList = () => {
       setUserType(storedUserType);
     }
   }, []);
+
+  useEffect(() => {
+    const fetchSortedData = async () => {
+      try {
+        const response = await axios.get(
+          `${process.env.BACKEND_HOSTNAME}/courses`,
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+          }
+        );
+        const data = response.data;
+        let sortedCards: Card[] = [];
+        switch (sortType) {
+          case "최신순":
+            sortedCards = data.trending;
+            break;
+          case "인기순":
+            sortedCards = data.choice;
+            break;
+          case "가격순":
+            sortedCards = [
+              ...data.trending,
+              ...data.choice,
+              ...data.recommended,
+            ].sort(
+              (a, b) =>
+                parseFloat(a.price.replace("₩", "").replace(",", "")) -
+                parseFloat(b.price.replace("₩", "").replace(",", ""))
+            );
+            break;
+          default:
+            sortedCards = data.trending;
+            break;
+        }
+        // 중복된 카드를 제거
+        const uniqueSortedCards = sortedCards.filter(
+          (card, index, self) =>
+            index === self.findIndex((c) => c.id === card.id)
+        );
+        setCards(uniqueSortedCards); // uniqueSortedCards 배열로만 업데이트
+      } catch (error) {
+        console.error("Error fetching sorted data:", error);
+      }
+    };
+
+    fetchSortedData();
+  }, [sortType]);
 
   const handleCreateClick = () => {
     router.push("/createClass");
@@ -54,35 +121,6 @@ const CardList = () => {
 
   const handleSortChange = (sortOption: string) => {
     setSortType(sortOption);
-    let sortedCards = [...cards];
-    switch (sortOption) {
-      case "최신 순":
-        sortedCards = sortedCards.sort((a, b) => {
-          if (
-            !(new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
-          ) {
-            return a.id - b.id;
-          } else {
-            return (
-              new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
-            );
-          }
-        });
-        break;
-      case "인기 순":
-        sortedCards = sortedCards.sort((a, b) => b.numWishes - a.numWishes);
-        break;
-      case "가격 순":
-        sortedCards = sortedCards.sort(
-          (a, b) =>
-            parseFloat(a.price.replace("₩", "").replace(",", "")) -
-            parseFloat(b.price.replace("₩", "").replace(",", ""))
-        );
-        break;
-      default:
-        break;
-    }
-    setCards(sortedCards);
   };
 
   const handleSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -90,7 +128,7 @@ const CardList = () => {
     handleSortChange(sortOption);
   };
 
-  const toggleLike = async (card: any) => {
+  const toggleLike = async (card: Card) => {
     const token = localStorage.getItem("token");
     if (!token) {
       Swal.fire({
@@ -158,7 +196,7 @@ const CardList = () => {
 
   const updateCardFavoriteStatus = (id: number, isFavorite: boolean) => {
     setCards((prevState) => {
-      const updateCards = (cards: any[]) =>
+      const updateCards = (cards: Card[]) =>
         cards.map((card) => (card.id === id ? { ...card, isFavorite } : card));
 
       return updateCards(prevState);
@@ -168,8 +206,6 @@ const CardList = () => {
   const filteredCards = cards.filter((card) =>
     card.title.includes(searchQuery)
   );
-
-  console.log(userType);
 
   return (
     <PageWrapper>
