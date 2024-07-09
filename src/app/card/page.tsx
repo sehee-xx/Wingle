@@ -58,6 +58,15 @@ const CardList = () => {
     }
   }, []);
 
+  const mergeFavoriteStatus = (newCards: Card[]) => {
+    return newCards.map((newCard) => {
+      const existingCard = cards.find((card) => card.id === newCard.id);
+      return existingCard
+        ? { ...newCard, isFavorite: existingCard.isFavorite }
+        : newCard;
+    });
+  };
+
   useEffect(() => {
     const fetchSortedData = async () => {
       try {
@@ -93,12 +102,13 @@ const CardList = () => {
             sortedCards = data.trending;
             break;
         }
-        // 중복된 카드를 제거
-        const uniqueSortedCards = sortedCards.filter(
-          (card, index, self) =>
-            index === self.findIndex((c) => c.id === card.id)
+        const uniqueSortedCards = mergeFavoriteStatus(
+          sortedCards.filter(
+            (card, index, self) =>
+              index === self.findIndex((c) => c.id === card.id)
+          )
         );
-        setCards(uniqueSortedCards); // uniqueSortedCards 배열로만 업데이트
+        setCards(uniqueSortedCards);
       } catch (error) {
         console.error("Error fetching sorted data:", error);
       }
