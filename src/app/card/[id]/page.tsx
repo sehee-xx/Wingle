@@ -51,6 +51,7 @@ const CardDetail = () => {
   } | null>(null);
   const [isApplied, setIsApplied] = useState(false);
   const [isMapLoaded, setIsMapLoaded] = useState(false);
+  const [userType, setUserType] = useState<string>("");
 
   useEffect(() => {
     const loadGoogleMapsScript = () => {
@@ -82,6 +83,11 @@ const CardDetail = () => {
       }
     };
 
+    const storedUserType = localStorage.getItem("userType");
+    if (storedUserType) {
+      setUserType(storedUserType);
+    }
+
     fetchData();
   }, [id]);
 
@@ -108,7 +114,7 @@ const CardDetail = () => {
         setCard((prevCard) =>
           prevCard ? { ...prevCard, isApplied: true } : prevCard
         );
-        setIsApplied(true); // 신청 상태 업데이트
+        setIsApplied((prev) => !prev); // 신청 상태 업데이트
         if (window.innerWidth <= 768) {
           MySwal.fire({
             icon: "success",
@@ -240,15 +246,16 @@ const CardDetail = () => {
                 한 타임 최대 인원: {card.participants}명
               </Participants>
               <Phone>{card.phone}</Phone>
-              {isApplied ? (
-                <CancelButton onClick={handleApplicationToggle}>
-                  취소하기
-                </CancelButton>
-              ) : (
-                <ApplicationButton onClick={handleApplicationToggle}>
-                  신청하기
-                </ApplicationButton>
-              )}
+              {userType !== "expert" &&
+                (isApplied ? (
+                  <CancelButton onClick={handleApplicationToggle}>
+                    취소하기
+                  </CancelButton>
+                ) : (
+                  <ApplicationButton onClick={handleApplicationToggle}>
+                    신청하기
+                  </ApplicationButton>
+                ))}
             </PurchaseSection>
           </TopRightInfo>
         </TopInfoBox>
