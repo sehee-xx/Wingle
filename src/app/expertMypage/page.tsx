@@ -79,20 +79,22 @@ const ExpertMypage = () => {
 
   const handleDeletePost = async (postId: number) => {
     try {
-      const token = localStorage.getItem("token");
-      const url = `${process.env.BACKEND_HOSTNAME}/courses/${postId}`;
-      const headers = {
-        Authorization: `Bearer ${token}`,
-      };
-
-      console.log("Request URL:", url);
-      console.log("Request Headers:", headers);
-
-      const response = await axios.delete(url, {
-        headers,
-      });
+      const response = await axios.delete(
+        `${process.env.BACKEND_HOSTNAME}/courses/${postId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
 
       console.log("Delete response:", response);
+
+      if (response.status === 200) {
+        // 상태 코드가 200인 경우에 상태를 업데이트
+        const updatedCourses = courses.filter((course) => course.id !== postId);
+        setCourses(updatedCourses);
+      }
 
       if (window.innerWidth <= 768) {
         MySwal.fire({
@@ -123,8 +125,6 @@ const ExpertMypage = () => {
           },
         });
       }
-      const updatedCourses = courses.filter((course) => course.id !== postId);
-      setCourses(updatedCourses);
     } catch (error) {
       console.error("Delete error:", error);
       Swal.fire({
