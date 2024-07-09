@@ -1,7 +1,8 @@
 "use client";
+
 import axios from "axios";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import styled from "styled-components";
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
@@ -180,13 +181,15 @@ const Signup = () => {
         </SignupGroup>
         <SignupGroup>
           <Grouplabel>이메일</Grouplabel>
-          <Input
-            name="email"
-            placeholder="이메일을 입력해주세요"
-            value={formData.email}
-            onChange={handleChange}
-            readOnly={!!socialEmail} // 소셜 로그인으로 넘어온 이메일은 수정 불가
-          />
+          <Suspense>
+            <Input
+              name="email"
+              placeholder="이메일을 입력해주세요"
+              value={formData.email}
+              onChange={handleChange}
+              readOnly={!!socialEmail}
+            />
+          </Suspense>
         </SignupGroup>
         <SignupGroup>
           <Grouplabel>비밀번호</Grouplabel>
@@ -214,7 +217,13 @@ const Signup = () => {
   );
 };
 
-export default Signup;
+export default function ex() {
+  return (
+    <Suspense>
+      <Signup />
+    </Suspense>
+  );
+}
 
 const LoginWrapper = styled.div`
   display: flex;
