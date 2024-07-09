@@ -1,16 +1,70 @@
 "use client";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Header from "../../components/Header";
 import styled from "styled-components";
+import axios from "axios";
+import { parseJwt } from "../../../utils/jwt";
+import { useRouter } from "next/navigation";
+
+interface Course {
+  id: number;
+  title: string;
+  date: string;
+  participants: number;
+  currentParticipants: number;
+  description: string;
+  image: string;
+}
 
 const StudentMypage = () => {
+  const [displayName, setDisplayName] = useState("");
+  const [token, setToken] = useState<string>("");
+  const [courses, setCourses] = useState<Course[]>([]);
+  const router = useRouter();
+
+  useEffect(() => {
+    const storedToken = localStorage.getItem("token");
+    if (storedToken) {
+      const user = parseJwt(storedToken);
+      setDisplayName(user?.displayName);
+      setToken(storedToken);
+    }
+  }, []);
+
+  const fetchData = async () => {
+    try {
+      const res = await axios.get(`${process.env.BACKEND_HOSTNAME}/courses`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      const wishedCourses = res.data.courses
+        .filter
+        // (course: Course) => course.wishelists && course.wishes.length > 0
+        ();
+      setCourses(wishedCourses || []);
+    } catch (error) {
+      console.error("Error fetching mypage:", error);
+    }
+  };
+
+  useEffect(() => {
+    if (token) {
+      fetchData();
+    }
+  }, [token]);
+
+  const handleViewClick = () => {
+    router.push("/");
+  };
+
   return (
     <>
       <Header />
       <StudentMypageWrapper>
         <Content>
           <NameBox>
-            <Name>박상우</Name>
+            <Name>{displayName}</Name>
             <NameOthers>님 안녕하세요!</NameOthers>
             <DropdownWrapper>
               <Dropdown>
@@ -19,160 +73,39 @@ const StudentMypage = () => {
               </Dropdown>
             </DropdownWrapper>
           </NameBox>
-          <PostCard>
-            <PostCardImg src="/assets/card/card13.png" />
-            <PostInfo>
-              <PostName>게시물 이름</PostName>
-              <PostSubData>업로드 날짜</PostSubData>
-              <PostSubData>신청자 n명</PostSubData>
-              <PostSubData>종료 여부: 진행중</PostSubData>
-              <PostDescription>
-                설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명
-              </PostDescription>
-            </PostInfo>
-          </PostCard>
-          <PostCard>
-            <PostCardImg src="/assets/card/card14.png" />
-            <PostInfo>
-              <PostName>게시물 이름</PostName>
-              <PostSubData>업로드 날짜</PostSubData>
-              <PostSubData>신청자 n명</PostSubData>
-              <PostSubData>종료 여부: 진행중</PostSubData>
-              <PostDescription>
-                설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명
-              </PostDescription>
-            </PostInfo>
-          </PostCard>
-          <PostCard>
-            <PostCardImg src="/assets/card/card15.png" />
-            <PostInfo>
-              <PostName>게시물 이름</PostName>
-              <PostSubData>업로드 날짜</PostSubData>
-              <PostSubData>신청자 n명</PostSubData>
-              <PostSubData>종료 여부: 진행중</PostSubData>
-              <PostDescription>
-                설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명
-              </PostDescription>
-            </PostInfo>
-          </PostCard>
-          <PostCard>
-            <PostCardImg src="/assets/card/card16.png" />
-            <PostInfo>
-              <PostName>게시물 이름</PostName>
-              <PostSubData>업로드 날짜</PostSubData>
-              <PostSubData>신청자 n명</PostSubData>
-              <PostSubData>종료 여부: 진행중</PostSubData>
-              <PostDescription>
-                설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명
-              </PostDescription>
-            </PostInfo>
-          </PostCard>
-          <PostCard>
-            <PostCardImg src="/assets/card/card17.png" />
-            <PostInfo>
-              <PostName>게시물 이름</PostName>
-              <PostSubData>업로드 날짜</PostSubData>
-              <PostSubData>신청자 n명</PostSubData>
-              <PostSubData>종료 여부: 진행중</PostSubData>
-              <PostDescription>
-                설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명
-              </PostDescription>
-            </PostInfo>
-          </PostCard>
-          <PostCard>
-            <PostCardImg src="/assets/card/card18.png" />
-            <PostInfo>
-              <PostName>게시물 이름</PostName>
-              <PostSubData>업로드 날짜</PostSubData>
-              <PostSubData>신청자 n명</PostSubData>
-              <PostSubData>종료 여부: 진행중</PostSubData>
-              <PostDescription>
-                설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명
-              </PostDescription>
-            </PostInfo>
-          </PostCard>
-          <PostCard>
-            <PostCardImg src="/assets/card/card19.png" />
-            <PostInfo>
-              <PostName>게시물 이름</PostName>
-              <PostSubData>업로드 날짜</PostSubData>
-              <PostSubData>신청자 n명</PostSubData>
-              <PostSubData>종료 여부: 진행중</PostSubData>
-              <PostDescription>
-                설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명
-              </PostDescription>
-            </PostInfo>
-          </PostCard>
-          <PostCard>
-            <PostCardImg src="/assets/card/card20.png" />
-            <PostInfo>
-              <PostName>게시물 이름</PostName>
-              <PostSubData>업로드 날짜</PostSubData>
-              <PostSubData>신청자 n명</PostSubData>
-              <PostSubData>종료 여부: 진행중</PostSubData>
-              <PostDescription>
-                설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명
-              </PostDescription>
-            </PostInfo>
-          </PostCard>
-          <PostCard>
-            <PostCardImg src="/assets/card/card21.png" />
-            <PostInfo>
-              <PostName>게시물 이름</PostName>
-              <PostSubData>업로드 날짜</PostSubData>
-              <PostSubData>신청자 n명</PostSubData>
-              <PostSubData>종료 여부: 진행중</PostSubData>
-              <PostDescription>
-                설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명
-              </PostDescription>
-            </PostInfo>
-          </PostCard>
-          <PostCard>
-            <PostCardImg src="/assets/card/card22.png" />
-            <PostInfo>
-              <PostName>게시물 이름</PostName>
-              <PostSubData>업로드 날짜</PostSubData>
-              <PostSubData>신청자 n명</PostSubData>
-              <PostSubData>종료 여부: 진행중</PostSubData>
-              <PostDescription>
-                설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명
-              </PostDescription>
-            </PostInfo>
-          </PostCard>
-          <PostCard>
-            <PostCardImg src="/assets/card/card23.png" />
-            <PostInfo>
-              <PostName>게시물 이름</PostName>
-              <PostSubData>업로드 날짜</PostSubData>
-              <PostSubData>신청자 n명</PostSubData>
-              <PostSubData>종료 여부: 진행중</PostSubData>
-              <PostDescription>
-                설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명
-              </PostDescription>
-            </PostInfo>
-          </PostCard>
-          <PostCard>
-            <PostCardImg src="/assets/card/card24.png" />
-            <PostInfo>
-              <PostName>게시물 이름</PostName>
-              <PostSubData>업로드 날짜</PostSubData>
-              <PostSubData>신청자 n명</PostSubData>
-              <PostSubData>종료 여부: 진행중</PostSubData>
-              <PostDescription>
-                설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명설명
-              </PostDescription>
-            </PostInfo>
-          </PostCard>
+          {courses.length > 0 ? (
+            courses.map((course) => (
+              <PostCard key={course.id}>
+                <PostCardImg src={course.image} />
+                <PostInfo>
+                  <PostName>{course.title}</PostName>
+                  <PostSubData>{course.date}</PostSubData>
+                  <PostSubData>신청자 {course.participants}명</PostSubData>
+                  <PostSubData>
+                    종료 여부:{" "}
+                    {course.currentParticipants >= course.participants
+                      ? "종료"
+                      : "진행중"}
+                  </PostSubData>
+                  <PostDescription>{course.description}</PostDescription>
+                </PostInfo>
+              </PostCard>
+            ))
+          ) : (
+            <NoClassContainer>
+              <NoClassImage src="/assets/student.svg" alt="No Classes" />
+              <NoClassText>아직 찜한 클래스가 없습니다.</NoClassText>
+              <ViewClassButton onClick={handleViewClick}>
+                클래스 구경하기
+              </ViewClassButton>
+            </NoClassContainer>
+          )}
         </Content>
         <Sidebar>
           <StickySidebar>
             <SidebarTitle>목록</SidebarTitle>
-            <SidebarItem className="latest" data-short="최신 순">
-              내가 찜한 클래스 보기
-            </SidebarItem>
-            <SidebarItem className="oldest" data-short="오래된 순">
-              내가 신청한 클래스 보기
-            </SidebarItem>
+            <SidebarItem>내가 찜한 클래스 보기</SidebarItem>
+            <SidebarItem>내가 신청한 클래스 보기</SidebarItem>
           </StickySidebar>
         </Sidebar>
       </StudentMypageWrapper>
@@ -386,4 +319,43 @@ const Dropdown = styled.select`
   border: 1px solid #ccc;
   color: #303033;
   font-size: 12px;
+`;
+
+const NoClassContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-top: 50px;
+  gap: 10px;
+`;
+
+const NoClassImage = styled.img`
+  width: 150px;
+  height: 150px;
+  margin-bottom: 20px;
+  border-radius: 50%;
+`;
+
+const NoClassText = styled.label`
+  font-size: 20px;
+  font-weight: 600;
+  color: #303033;
+  margin-bottom: 20px;
+`;
+
+const ViewClassButton = styled.button`
+  padding: 10px 20px;
+  font-size: 16px;
+  font-weight: bold;
+  color: #fff;
+  background-color: #ff812e;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+
+  &:hover {
+    background-color: #e66f1e;
+  }
 `;
