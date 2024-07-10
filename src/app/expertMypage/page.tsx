@@ -59,22 +59,32 @@ const ExpertMypage = () => {
   }, []);
 
   const fetchData = async () => {
+    console.log("Fetching data...");
+    console.log(token);
     try {
-      const res = await axios.get(`${process.env.BACKEND_HOSTNAME}/courses`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const res = await axios.get(
+        `${process.env.BACKEND_HOSTNAME}/courses/mypage`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
 
-      let sortedCourses = res.data.trending || [];
+      console.log("Res", res.data.courses);
+
+      let sortedCourses = res.data.courses || [];
       if (sortByField === "created_at") {
         sortedCourses =
           sortByDirection === "desc"
-            ? res.data.trending
-            : res.data.trending.slice().reverse();
+            ? res.data.courses
+            : res.data.courses.slice().reverse();
       } else if (sortByField === "popularity") {
-        sortedCourses = res.data.choices;
+        sortedCourses = res.data.courses.sort(
+          (a: any, b: any) => b.numWishes - a.numWishes
+        );
       }
+      console.log("sortedCourses", sortedCourses);
       setCourses(sortedCourses);
       setIsLoading(false);
     } catch (error) {
@@ -148,7 +158,7 @@ const ExpertMypage = () => {
     const direction = value.substring(index + 1);
     setSortByField(field);
     setSortByDirection(direction);
-    console.log(field, direction);
+    console.log(sortByField, sortByDirection);
   };
 
   if (isLoading) {
