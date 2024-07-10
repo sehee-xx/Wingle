@@ -7,6 +7,7 @@ import DaumPostcode from "react-daum-postcode";
 import dynamic from "next/dynamic";
 import { useParams, useRouter } from "next/navigation";
 import axios from "axios";
+import dayjs from "dayjs";
 
 const MySwal = withReactContent(Swal);
 const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
@@ -108,8 +109,24 @@ const CreateClassForm: React.FC<CreateClassFormProps> = ({
 
   const handleFormSubmit = async () => {
     const data = new FormData();
-    for (const key in formData) {
-      const value = formData[key as keyof typeof formData];
+
+    const formattedDate = dayjs(formData.date).toISOString();
+    if (!dayjs(formData.date).isValid()) {
+      Swal.fire({
+        icon: "error",
+        title: "유효하지 않은 날짜 형식",
+        text: "올바른 날짜와 시간 형식으로 입력해주세요.",
+      });
+      return;
+    }
+
+    const modifiedFormData = { ...formData, date: formattedDate };
+
+    console.log("formattedDate", formattedDate);
+    console.log("modifiedFormData", modifiedFormData);
+
+    for (const key in modifiedFormData) {
+      const value = modifiedFormData[key as keyof typeof modifiedFormData];
       if (value !== undefined) {
         data.append(key, value);
       }
@@ -185,6 +202,7 @@ const CreateClassForm: React.FC<CreateClassFormProps> = ({
       <InfoGroup>
         <SubLabel>날짜</SubLabel>
         <InfoInput
+          type="datetime-local"
           name="date"
           placeholder="날짜를 입력해주세요"
           value={formData.date}
