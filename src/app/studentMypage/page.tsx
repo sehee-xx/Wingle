@@ -22,7 +22,6 @@ const StudentMypage = () => {
   const [token, setToken] = useState<string>("");
   const [historyCourses, setHistoryCourses] = useState<Course[]>([]);
   const [wishListCourses, setWishListCourses] = useState<Course[]>([]);
-  const [menu, setMenu] = useState(false);
   const [courses, setCourses] = useState(historyCourses);
   const [isLoading, setIsLoading] = useState(true);
   const [sortByField, setSortByField] = useState<string>("wishlist");
@@ -59,9 +58,8 @@ const StudentMypage = () => {
     }
   };
 
-  const onClickMenu = () => {
+  const onClickMenu = (menu) => {
     console.log("onClickMenu!!");
-    setMenu((prev) => !prev);
     if (menu) {
       setCourses(historyCourses);
     } else {
@@ -151,7 +149,7 @@ const StudentMypage = () => {
               onClick={() => {
                 setSortByField("wishlist");
                 setSortByDirection("asc");
-                onClickMenu();
+                onClickMenu(false);
               }}
             >
               내가 찜한 클래스 보기
@@ -160,7 +158,7 @@ const StudentMypage = () => {
               onClick={() => {
                 setSortByField("history");
                 setSortByDirection("asc");
-                onClickMenu();
+                onClickMenu(true);
               }}
             >
               내가 신청한 클래스 보기
