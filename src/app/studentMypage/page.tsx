@@ -5,6 +5,7 @@ import styled from "styled-components";
 import axios from "axios";
 import { parseJwt } from "../../../utils/jwt";
 import { useRouter } from "next/navigation";
+import Loading from "../../components/Loading";
 
 interface Course {
   id: number;
@@ -13,13 +14,19 @@ interface Course {
   participants: number;
   currentParticipants: number;
   description: string;
-  image: string;
+  images: string[];
 }
 
 const StudentMypage = () => {
   const [displayName, setDisplayName] = useState("");
   const [token, setToken] = useState<string>("");
-  const [courses, setCourses] = useState<Course[]>([]);
+  const [historyCourses, setHistoryCourses] = useState<Course[]>([]);
+  const [wishListCourses, setWishListCourses] = useState<Course[]>([]);
+  const [menu, setMenu] = useState(false);
+  const [courses, setCourses] = useState(historyCourses);
+  const [isLoading, setIsLoading] = useState(true);
+  const [sortByField, setSortByField] = useState<string>("wishlist");
+  const [sortByDirection, setSortByDirection] = useState<string>("desc");
   const router = useRouter();
 
   useEffect(() => {
@@ -33,18 +40,32 @@ const StudentMypage = () => {
 
   const fetchData = async () => {
     try {
-      const res = await axios.get(`${process.env.BACKEND_HOSTNAME}/courses`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      const wishedCourses = res.data.courses
-        .filter
-        // (course: Course) => course.wishelists && course.wishes.length > 0
-        ();
-      setCourses(wishedCourses || []);
+      const res = await axios.get(
+        `${process.env.BACKEND_HOSTNAME}/courses/mypage`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      console.log("res.data.courses.history", res.data.history);
+      console.log("res.data.courses.wishlist", res.data.wishlist);
+      setHistoryCourses(res.data.history || []);
+      setWishListCourses(res.data.wishlist || []);
+      setIsLoading(false);
     } catch (error) {
       console.error("Error fetching mypage:", error);
+      setIsLoading(false);
+    }
+  };
+
+  const onClickMenu = () => {
+    console.log("onClickMenu!!");
+    setMenu((prev) => !prev);
+    if (menu) {
+      setCourses(historyCourses);
+    } else {
+      setCourses(wishListCourses);
     }
   };
 
@@ -52,11 +73,30 @@ const StudentMypage = () => {
     if (token) {
       fetchData();
     }
-  }, [token]);
+  }, [token, sortByField, sortByDirection]);
 
   const handleViewClick = () => {
     router.push("/");
   };
+
+  const handleSortChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const value = e.target.value;
+    const index = value.lastIndexOf("_");
+    const field = value.substring(0, index);
+    const direction = value.substring(index + 1);
+    setSortByField(field);
+    setSortByDirection(direction);
+    if (field === "wishlist") {
+      setCourses(wishListCourses);
+    } else {
+      setCourses(historyCourses);
+    }
+    console.log(field, direction);
+  };
+
+  if (isLoading) {
+    return <Loading />;
+  }
 
   return (
     <>
@@ -67,16 +107,19 @@ const StudentMypage = () => {
             <Name>{displayName}</Name>
             <NameOthers>님 안녕하세요!</NameOthers>
             <DropdownWrapper>
-              <Dropdown>
-                <option value="latest">찜한 클래스 보기</option>
-                <option value="oldest">신청한 클래스 보기</option>
+              <Dropdown
+                value={`${sortByField}_${sortByDirection}`}
+                onChange={handleSortChange}
+              >
+                <option value="wishlist_asc">찜한 클래스 보기</option>
+                <option value="history_asc">신청한 클래스 보기</option>
               </Dropdown>
             </DropdownWrapper>
           </NameBox>
           {courses.length > 0 ? (
             courses.map((course) => (
               <PostCard key={course.id}>
-                <PostCardImg src={course.image} />
+                <PostCardImg src={course.images[0]} />
                 <PostInfo>
                   <PostName>{course.title}</PostName>
                   <PostSubData>{course.date}</PostSubData>
@@ -104,8 +147,24 @@ const StudentMypage = () => {
         <Sidebar>
           <StickySidebar>
             <SidebarTitle>목록</SidebarTitle>
-            <SidebarItem>내가 찜한 클래스 보기</SidebarItem>
-            <SidebarItem>내가 신청한 클래스 보기</SidebarItem>
+            <SidebarItem
+              onClick={() => {
+                setSortByField("wishlist");
+                setSortByDirection("asc");
+                onClickMenu();
+              }}
+            >
+              내가 찜한 클래스 보기
+            </SidebarItem>
+            <SidebarItem
+              onClick={() => {
+                setSortByField("history");
+                setSortByDirection("asc");
+                onClickMenu();
+              }}
+            >
+              내가 신청한 클래스 보기
+            </SidebarItem>
           </StickySidebar>
         </Sidebar>
       </StudentMypageWrapper>
@@ -282,11 +341,11 @@ const SidebarItem = styled.div`
   }
 
   @media (max-width: 480px) {
-    &.latest::after {
-      content: "최신 순";
+    /* &.wishlist::after {
+      content: "찜";
     }
 
-    &.oldest::after {
+    &.history::after {
       content: "오래된 순";
     }
 
@@ -294,12 +353,12 @@ const SidebarItem = styled.div`
       content: "찜 많은 순";
     }
 
-    &.latest,
-    &.oldest,
+    &.wishlist,
+    &.history,
     &.most-liked {
       font-size: 14px;
       content: attr(data-short);
-    }
+    } */
   }
 `;
 
