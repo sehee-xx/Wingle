@@ -37,6 +37,7 @@ interface CardProps {
   numWishes: number;
   createdAt: string;
   isApplied: boolean;
+  isParticipating: boolean;
 }
 
 const MySwal = withReactContent(Swal);
@@ -78,7 +79,8 @@ const CardDetail = () => {
           `${process.env.BACKEND_HOSTNAME}/courses/${id}`
         );
         setCard(res.data);
-        setIsApplied(res.data.isApplied);
+        setIsApplied(res.data.isParticipating);
+        console.log("!!!!!!!!!", res.data);
         setIsLoading(false);
       } catch (error) {
         console.error("Error fetching card data:", error);
