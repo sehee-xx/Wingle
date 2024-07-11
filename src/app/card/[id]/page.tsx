@@ -76,11 +76,16 @@ const CardDetail = () => {
     const fetchData = async () => {
       try {
         const res = await axios.get(
-          `${process.env.BACKEND_HOSTNAME}/courses/${id}`
+          `${process.env.BACKEND_HOSTNAME}/courses/${id}`,
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+          }
         );
         setCard(res.data);
+        console.log("Res", res.data);
         setIsApplied(res.data.isParticipating);
-        console.log("!!!!!!!!!", res.data);
         setIsLoading(false);
       } catch (error) {
         console.error("Error fetching card data:", error);

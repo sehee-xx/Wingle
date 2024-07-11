@@ -78,9 +78,9 @@ const KakaoRedirect = () => {
         const email = error.response?.data?.email; // Ensure email is extracted
         if (window.innerWidth <= 768) {
           MySwal.fire({
-            icon: "error",
-            title: "로그인 실패",
-            text: "회원가입이 필요합니다!",
+            icon: "info",
+            title: "회원가입 필수",
+            text: "회원가입을 먼저 해주세요!",
             toast: true,
             position: "top-end",
             showConfirmButton: false,
@@ -93,9 +93,9 @@ const KakaoRedirect = () => {
           });
         } else {
           MySwal.fire({
-            icon: "error",
-            title: "로그인 실패",
-            text: "회원가입이 필요합니다!",
+            icon: "info",
+            title: "회원가입 필수",
+            text: "회원가입을 먼저 해주세요!",
             confirmButtonText: "확인",
             confirmButtonColor: "#FF812E",
             customClass: {

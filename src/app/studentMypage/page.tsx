@@ -52,6 +52,12 @@ const StudentMypage = () => {
       setHistoryCourses(res.data.history || []);
       setWishListCourses(res.data.wishlist || []);
       setIsLoading(false);
+
+      if (sortByField === "history") {
+        setCourses(res.data.history);
+      } else {
+        setCourses(res.data.wishlist);
+      }
     } catch (error) {
       console.error("Error fetching mypage:", error);
       setIsLoading(false);
